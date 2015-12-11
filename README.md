@@ -3,6 +3,7 @@ A Course Recommendation System for the Confused Student
 
 The original proposal for the project is below:
 
+**Description:**
 We propose a Yale Bluebook Recommendation System for our final project. This will take in a number of inputs for the user, including past course history (and how the user rated those courses), topic preferences, and workload preferences. Using this data, it will create a weighted "preference" score for each class offered, which the user can utilize when considering courses to select. We will use existing ratings on the Coursetable website (formerly Yale Bluebook Plus, created by Yale alum) for numerical ratings of a class's workload and quality. To match subject matter preferences, the program will compare keywords that the user enters to the course's name and description (and possibly syllabus if available). The user's ratings of old courses will be used when evaluating similar courses. Finally, the user will also be able to adjust how each factor is weighed; for example, the user can choose to weigh workload over quality, and the program will take this into account when calculating the preference score. This project will be written in Python. 
 
 Given that this problem has several real-world variables each with various attributes, we will approach the problem from an object-oriented perspective. Our primary objects will be Students and Recommendations. Within the Student object, we will incorporate elements that include but are not limited to the following:
@@ -25,4 +26,16 @@ We will get course data from the Yale Courses API and store it in a database. Th
 
 In short, this system will act like an automated adviser who provides tailored solutions to students after brief consultations. It has the potential to solve many of the problems that students face during Shopping Period while increasing efficiency of the entire process. For athletes, it would automatically factor in their busy schedules and remove the clutter of classes that are incompatible with their schedules. For students beginning a semester full of job interviews, the system will naturally reduce the prospective workload of the student's schedule while still considering all of the other constraints in their life, like graduation requirements. Ultimately, our system would be able to serve as a useful supplement to the resources already provided by the University.
 
-Primarily, this project will be written in Python. Ideally, we will implement a web-based, user-friendly interface that anyone can use. Most likely, we will build this using Flask or Django, which are MVC web frameworks both built with Python. If fully implemented, we would probably use a SQL database to store all of the information.
+Primarily, this project will be written in Python. Ideally, we will implement a web-based, user-friendly interface that anyone can use. Most likely, we will build this using Flask or Django, which are MVC web frameworks both built with Python. If fully implemented, we would probably use an SQL database to store all of the information.
+
+**Group Members:**
+Michael Byrnes
+Raymond Zhu
+Howard Clark
+
+**Division of Labor:**
+Database - Howard
+Yale API - Howard/Raymond
+Backend - Michael
+Frontend - Raymond/Michael
+Recommendation Model - all
