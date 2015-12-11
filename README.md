@@ -1,2 +1,2 @@
-# ads-final-proj
-ADS Final Project - Course Recommendation System
+# CS 458 Automated Decision Systems Final Project
+A Course Recommendation System for the Confused Student
