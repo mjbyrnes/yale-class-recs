@@ -35,7 +35,11 @@ Howard Clark
 
 **Division of Labor:**
 Database - Howard
+
 Yale API - Howard/Raymond
+
 Backend - Michael
+
 Frontend - Raymond/Michael
+
 Recommendation Model - all
