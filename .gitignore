@@ -58,3 +58,9 @@ target/
 
 # Mac
 .DS_Store
+
+# Other
+venv/
+db.sqlite3
+*.pyc
+/static
