@@ -64,3 +64,4 @@ venv/
 db.sqlite3
 *.pyc
 /static
+*.sqlite
