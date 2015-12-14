@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<html>
+  <head>
+    <link href="{% static 'yale_class_recs/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="{% static 'yale_class_recs/lib/css/cover.css' %}" media="screen">
+  </head>
+
+  <body>
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">Eli: The Smart Course Assistant</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li class="active"><a href="#">Home</a></li>
+                  <li><a href="#About">About</a></li>
+                  <li><a href="#">Contact</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <h1 class="cover-heading">Welcome to Eli.</h1>
+            <p class="lead">Need an easy fifth class? <br> Want to challenge yourself in a new field? <br> Looking for a great science distributional requirement? <br> Eli's got you covered.</p>
+            <p class="lead">
+              <a href="info" class="btn btn-lg btn-default">Begin</a>
+            </p>
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Built with Django and Bootstrap.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

@@ -18,6 +18,6 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-	url(r'^yale_class_recs/', include('yale_class_recs.urls')),
+	url(r'^yale_class_recs/', include('yale_class_recs.urls', namespace="yale_class_recs")),
     url(r'^admin/', admin.site.urls),
 ]

@@ -9,6 +9,42 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+majors = ['African American Studies (B.A.)','African Studies (B.A.)','American Studies (B.A.)','Anthropology (B.A.)',
+'Applied Mathematics (B.A. or B.S.)','Applied Physics (B.S.)','Archaeological Studies (B.A.)','Architecture (B.A.)',
+'Art (B.A.)','Astronomy (B.A.)','Astronomy and Physics (B.S.)','Astrophysics (B.S.)','Biomedical Engineering (B.S.)',
+'Chemical Engineering (B.S.)','Chemistry (B.A. or B.S.)','Classical Civilization (B.A.)','Classics (B.A.)',
+'Cognitive Science (B.A. or B.S.)','Computer Science (B.A. or B.S.)','Computer Science and Mathematics (B.A. or B.S.)',
+'Computer Science and Psychology (B.A.)','Computing and the Arts (B.A.)','East Asian Languages and Literatures (B.A.)',
+'East Asian Studies (B.A.)','Ecology and Evolutionary Biology (B.A. or B.S.)','Economics (B.A.)','Economics and Mathematics (B.A.)',
+'Electrical Engineering (B.S.)','Electrical Engineering and Computer Science (B.S.)','Engineering Sciences (Chemical) (B.S.)',
+'Engineering Sciences (Electrical) (B.A. or B.S.)','Engineering Sciences (Environmental) (B.A.)',
+'Engineering Sciences (Mechanical) (B.A. or B.S.)','English (B.A.)','Environmental Engineering (B.S.)',
+'Environmental Studies (B.A.)','Ethics, Politics, and Economics (B.A.)','Ethnicity, Race, and Migration (B.A.)',
+'Film and Media Studies (B.A.)','French (B.A.)','Geology and Geophysics (B.S.)','Geology and Natural Resources (B.A.)',
+'German (B.A.)','German Studies (B.A.)','Global Affairs (B.A.)','Greek, Ancient and Modern (B.A.)','History (B.A.)',
+'History of Art (B.A.)','History of Science, Medicine, and Public Health (B.A.)','Humanities (B.A.)','Italian (B.A.)',
+'Judaic Studies (B.A.)','Latin American Studies (B.A.)','Linguistics (B.A.)','Literature (B.A.)','Mathematics (B.A. or B.S.)',
+'Mathematics and Philosophy (B.A.)','Mathematics and Physics (B.S.)','Mechanical Engineering (B.S.)','Modern Middle East Studies (B.A.)',
+'Molecular Biophysics and Biochemistry (B.A. or B.S.)','Molecular, Cellular, and Developmental Biology (B.A. or B.S.)',
+'Music (B.A.)','Near Eastern Languages and Civilizations (B.A.)','Philosophy (B.A.)','Physics (B.S.)','Physics and Geosciences (B.S.)',
+'Physics and Philosophy (B.A.)','Political Science (B.A.)','Portuguese (B.A.)','Psychology (B.A. or B.S.)','Religious Studies (B.A.)',
+'Russian (B.A.)','Russian and East European Studies (B.A.)','Sociology (B.A.)','South Asian Studies (second major only)',
+'Spanish (B.A.)','Special Divisional Major (B.A. or B.S.)','Statistics (B.A. or B.S.)','Theater Studies (B.A.)',
+'Women\'s, Gender, and Sexuality Studies (B.A.)']
+
+class Student(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    grad_years = (
+        ('2016', '2016'),
+        ('2017', '2017'),
+        ('2018', '2018'),
+        ('2019', '2019'),
+    )
+    grad_year = models.CharField(max_length=4, choices=grad_years)
+    major = models.CharField(max_length=100, choices=[(x,x) for x in majors])
+
+
 
 class EvaluationComments(models.Model):
     id = models.IntegerField(primary_key=True, blank=True, null=False)  # AutoField?
