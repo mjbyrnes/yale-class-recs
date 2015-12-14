@@ -64,4 +64,4 @@ venv/
 db.sqlite3
 *.pyc
 /static
-evaluations.sqlite
+*.sqlite
