@@ -44,7 +44,32 @@ class Student(models.Model):
     grad_year = models.CharField(max_length=4, choices=grad_years)
     major = models.CharField(max_length=100, choices=[(x,x) for x in majors])
 
-
+class CourseProfile(models.Model):
+    course_id = models.IntegerField(blank=True, null=True)
+    subject = models.TextField(blank=True, null=True)
+    number = models.TextField(blank=True, null=True)
+    season = models.IntegerField(blank=True, null=True)
+    time = models.TimeField(blank=True, null=True)
+    title = models.TextField(blank=True, null=True)
+    long_title = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    skills = (
+        ('QR', 'QR'),
+        ('L', 'L'),
+        ('WR', 'WR'),
+    )
+    skill = models.CharField(max_length=2,choices=skills)
+    areas = (
+        ('SC', 'SC'),
+        ('HU','HU'),
+        ('SO','SO'),
+    )
+    area = models.CharField(max_length=2,choices=areas)
+    average_rating = models.FloatField(blank=True, null=True)
+    average_difficulty = models.FloatField(blank=True, null=True)
+    num_students = models.IntegerField(blank=True, null=True)
+    oci_id = models.IntegerField(blank=True, null=True)
+    ybb_id = models.IntegerField(unique=True, blank=True, null=True)
 
 class EvaluationComments(models.Model):
     id = models.IntegerField(primary_key=True, blank=True, null=False)  # AutoField?
