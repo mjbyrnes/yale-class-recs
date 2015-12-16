@@ -54,15 +54,15 @@ class CourseProfile(models.Model):
     long_title = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     skills = (
-        ('QR', 'QR'),
-        ('L', 'L'),
-        ('WR', 'WR'),
+        ('QR', 'QR (Quantitative Reasoning)'),
+        ('L', 'L (Foreign Language)'),
+        ('WR', 'WR (Writing)'),
     )
     skill = models.CharField(max_length=2,choices=skills)
     areas = (
-        ('SC', 'SC'),
-        ('HU','HU'),
-        ('SO','SO'),
+        ('SC', 'SC (Sciences)'),
+        ('HU','HU (Humanities)'),
+        ('SO','SO (Social Sciences)'),
     )
     area = models.CharField(max_length=2,choices=areas)
     average_rating = models.FloatField(blank=True, null=True)

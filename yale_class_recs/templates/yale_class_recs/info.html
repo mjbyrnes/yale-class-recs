@@ -3,10 +3,13 @@
 {% block content %}
 <h1>Let's begin.</h1>
 <p>Fill out the form below with all of the proper information. Based on your responses, you'll be provided with some recommendations and an explanation of the suggestions. If you leave any fields blank, they simply won't factor into the calculations.</p>
-<h2>General Information</h2>
+
 <form action="/general-info/" method="post">
     {% csrf_token %}
+    <h2>General Information</h2>
     {{ form.as_p }}
+    <h2>Course Preferences</h2>
+    {{ form2.as_p }}
     <input type="submit" value="Submit" class="btn btn-default"/>
 </form>
 
