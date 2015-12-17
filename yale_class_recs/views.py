@@ -53,17 +53,17 @@ def get_new_user_info(request):
       elif password != form.cleaned_data['confirm_password']:
         error = "The passwords entered do not match"
       else:
-        new_user = User.objects.create_user(username, password, first_name=first_name, 
+        new_user = User.objects.create_user(username, email=None, password=password, first_name=first_name, 
           last_name=last_name)
         new_user.save()
         student = Student.objects.create(first_name=first_name, last_name=last_name,
-          grad_year=grad_year, major=major, username=new_user)
+          grad_year=grad_year, major=major, user=new_user)
         student.save()
         user = authenticate(username=username, password=password)
         if user is not None:
           if user.is_active:
             login(request, user)
-            return HttpResponseRedirect('/yale_class_recs/account/profile')
+            return HttpResponseRedirect('/yale_class_recs/accounts/profile')
           else:
             error = "An account for this user already exists, but it is deactivated"
         else:
