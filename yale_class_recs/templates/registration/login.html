@@ -1,0 +1,32 @@
+{% extends "yale_class_recs/base.html" %}
+
+{% block content %}
+
+<h1>Log In</h1>
+
+<p>Please enter your username and password to log in. If you don't yet have an account, <a href="/yale_class_recs/new_user_info">click here</a> to set one up and get started with Eli</p>
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+<form method="post" action="{% url 'yale_class_recs:login' %}">
+{% csrf_token %}
+<div style="padding-bottom: 20px">
+<table>
+    <tr>
+        <td>{{ form.username.label_tag }}</td>
+        <td>{{ form.username }}</td>
+    </tr>
+    <tr>
+        <td>{{ form.password.label_tag }}</td>
+        <td>{{ form.password }}</td>
+    </tr>
+</table>
+</div>
+
+<input type="submit" value="submit" />
+<input type="hidden" name="next" value="/yale_class_recs/home" />
+</form>
+
+{% endblock %}

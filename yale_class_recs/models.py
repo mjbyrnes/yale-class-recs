@@ -8,6 +8,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
 
 majors = ['African American Studies (B.A.)','African Studies (B.A.)','American Studies (B.A.)','Anthropology (B.A.)',
 'Applied Mathematics (B.A. or B.S.)','Applied Physics (B.S.)','Archaeological Studies (B.A.)','Architecture (B.A.)',
@@ -43,6 +44,11 @@ class Student(models.Model):
     )
     grad_year = models.CharField(max_length=4, choices=grad_years)
     major = models.CharField(max_length=100, choices=[(x,x) for x in majors])
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True
+    )
 
 class CourseProfile(models.Model):
     course_id = models.IntegerField(blank=True, null=True)
