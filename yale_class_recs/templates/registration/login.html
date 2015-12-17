@@ -4,7 +4,7 @@
 
 <h1>Log In</h1>
 
-<p>Please enter your username and password to log in. If you don't yet have an account, <a href="/yale_class_recs/new_user_info">click here</a> to set one up and get started with Eli</p>
+<p>Please enter your username and password to log in.</p>
 
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
@@ -25,8 +25,9 @@
 </table>
 </div>
 
-<input type="submit" value="submit" />
+<input type="submit" value="Log In" class="btn btn-default"/>
 <input type="hidden" name="next" value="/yale_class_recs/home" />
 </form>
 
+<p>If you don't yet have an account, <a href="/yale_class_recs/new_user_info">click here</a> to set one up and get started with Eli.</p>
 {% endblock %}

@@ -45,5 +45,9 @@ img {
 }
 
 label {
-  padding-left: 20px;
+  padding-left: 10px;
+}
+
+td {
+  padding: 10px;
 }
