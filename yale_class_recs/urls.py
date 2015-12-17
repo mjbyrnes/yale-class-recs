@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
 	url(r'^$', views.CoverView.as_view(), name='cover'),
+	url(r'^about/$', views.about, name="about"),
 	url(r'^login/$', login,
 		{'template_name': 'registration/login.html', 'extra_context': 
 		{'next':'/yale_class_recs/accounts/profile'}}, name='login'),

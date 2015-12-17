@@ -16,6 +16,9 @@ class CoverView(generic.ListView):
   def get_queryset(self):
     return None
 
+def about(request):
+  return render(request, 'yale_class_recs/about.html', {})
+
 def get_name(request):
   if request.method == 'POST':
       form = CourseForm(request.POST)
