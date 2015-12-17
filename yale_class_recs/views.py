@@ -19,7 +19,7 @@ class CoverView(generic.ListView):
 def about(request):
   return render(request, 'yale_class_recs/about.html', {})
 
-def get_name(request):
+def search(request):
   if request.method == 'POST':
       form = CourseForm(request.POST)
       if form.is_valid():
@@ -28,7 +28,7 @@ def get_name(request):
   else:
       form = CourseForm()
 
-  return render(request, 'yale_class_recs/info.html', {'form': form,})
+  return render(request, 'yale_class_recs/search.html', {'form': form,})
 
 def get_new_user_info(request):
   error = 0

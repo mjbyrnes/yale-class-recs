@@ -20,5 +20,5 @@ urlpatterns = [
 	url(r'^new_user_info/$', views.get_new_user_info, name='new_user_info'),
 	url(r'^accounts/profile/$', views.user_home, name='user_home_page'),
 	url(r'^accounts/edit_info/$', views.edit_info, name="edit_info"),
-	url(r'^info/$', views.get_name, name='info'),
+	url(r'^search/$', views.search, name='search'),
 ]
