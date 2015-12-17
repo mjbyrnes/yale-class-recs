@@ -4,7 +4,7 @@
 <h1>Let's begin.</h1>
 <p>Fill out the form below with all of the proper information. Based on your responses, you'll be provided with some recommendations and an explanation of the suggestions. If you leave any fields blank, they simply won't factor into the calculations.</p>
 
-<form action="/general-info/" method="post">
+<form action="info" method="post">
     {% csrf_token %}
     <h2>General Information</h2>
     {{ form.as_p }}

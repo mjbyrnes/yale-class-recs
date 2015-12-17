@@ -65,3 +65,4 @@ db.sqlite3
 *.pyc
 /static
 *.sqlite
+yale_class_recs/static/yale_class_recs/bootstrap/css/.Rhistory
