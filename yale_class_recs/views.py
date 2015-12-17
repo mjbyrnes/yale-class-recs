@@ -1,15 +1,14 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.views import generic
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .forms import UserForm, StudentForm, CourseForm
+
+from .forms import UserForm, StudentForm, CourseForm, WeightForm
 
 from .models import Student
-
-#def index(request):
-#    return HttpResponse(index.html)
 
 class CoverView(generic.ListView):
   template_name = "yale_class_recs/cover.html"
@@ -20,15 +19,47 @@ def about(request):
   return render(request, 'yale_class_recs/about.html', {})
 
 def search(request):
+  if not request.user.is_authenticated():
+    return HttpResponseRedirect('/yale_class_recs/login')
+
   if request.method == 'POST':
       form = CourseForm(request.POST)
-      if form.is_valid():
+      form2 = WeightForm(request.POST)
+      if form.is_valid() and form2.is_valid():
+        return search_results(request)
 
-          return HttpResponseRedirect('/thanks/')
-  else:
-      form = CourseForm()
+  form = CourseForm()
+  form2 = WeightForm()
+  return render(request, 'yale_class_recs/search.html', {'form': form, 'form2': form2,})
 
-  return render(request, 'yale_class_recs/search.html', {'form': form,})
+def search_results(request):
+  if not request.user.is_authenticated():
+    return HttpResponseRedirect('/yale_class_recs/login')
+
+  form = CourseForm(request.POST)
+  form2 = WeightForm(request.POST)
+  if form.is_valid() and form2.is_valid():
+    difficulty = form.cleaned_data['difficulty']
+    rating = form.cleaned_data['rating']
+    size = form.cleaned_data['size']
+    day = form.cleaned_data['day']
+    start_time = form.cleaned_data['start_time']
+    end_time = form.cleaned_data['end_time']
+    area = form.cleaned_data['area']
+    skills = form.cleaned_data['skills']
+    keywords = form.cleaned_data['keywords']
+    major = form.cleaned_data['major']
+
+    difficulty_weight = form2.cleaned_data['difficulty_weight']
+    rating_weight = form2.cleaned_data['rating_weight']
+    size_weight = form2.cleaned_data['size_weight']
+    time_weight = form2.cleaned_data['time_weight']
+
+    return render(request, 'yale_class_recs/search_results.html', {})
+
+  form = CourseForm()
+  form2 = WeightForm()
+  return render(request, 'yale_class_recs/search.html', {'form': form, 'form2': form2,})
 
 def get_new_user_info(request):
   error = 0

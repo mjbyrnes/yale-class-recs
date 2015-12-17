@@ -28,6 +28,9 @@ form p
     {% csrf_token %}
     <h2>Course Preferences</h2>
     {{ form.as_p }}
+    <h2>Category Importance</h2>
+    <p>Please select how important each factor is to you on a scale from 0-10. A selection of 0 means a given factor will not be considered in picking a class, while a score of 10 means your selection for that category will absolutely be reflected in the class chosen</p>
+    {{ form2.as_p }}
     <div style="padding-top: 50px">
     	<input type="submit" value="Submit" class="btn btn-default"/>
 	</div>

@@ -20,8 +20,9 @@ class StudentForm(ModelForm):
         }
 
 class CourseForm(forms.Form):
-    difficulty = forms.IntegerField(min_value=1, max_value=5)
-    rating = forms.IntegerField(min_value=1, max_value=5)
+    INT_CHOICES = [(i, i) for i in range(1,6)]
+    difficulty = forms.ChoiceField(choices=INT_CHOICES, required=False)
+    rating = forms.ChoiceField(choices=INT_CHOICES, required=False)
     size = forms.ChoiceField(choices=(('lecture', 'Lecture'), ('seminar', 'Seminar')), required=False)
     DAY_CHOICES = ((1, 'Monday'), (2, 'Tuesday'), (3, 'Wednesday'), (4, 'Thursday'),
         (5, 'Friday'))
@@ -36,9 +37,17 @@ class CourseForm(forms.Form):
         (3, 'So')), required=False, widget=forms.CheckboxSelectMultiple)
     skills = forms.MultipleChoiceField(choices=((1, 'QR'), (2, 'WR'), (3, 'Lang')), required=False,
         widget=forms.CheckboxSelectMultiple)
-    keywords = forms.CharField(help_text="Enter keyword search terms", widget=forms.Textarea())
+    keywords = forms.CharField(help_text="Enter keyword search terms", widget=forms.Textarea(),
+        required=False)
     major = forms.MultipleChoiceField(choices=((1, 'yes'), (2, 'no')), required=False,
         label='Class in your major', widget=forms.CheckboxSelectMultiple)
+
+class WeightForm(forms.Form):
+    INT_CHOICES = [(i, i) for i in range(11)]
+    difficulty_weight = forms.ChoiceField(choices=INT_CHOICES, required=False, label="Difficulty")
+    rating_weight = forms.ChoiceField(choices=INT_CHOICES, required=False, label="Rating")
+    size_weight = forms.ChoiceField(choices=INT_CHOICES, required=False, label="Size")
+    time_weight = forms.ChoiceField(choices=INT_CHOICES, required=False, label="Day and Time")
 
     '''
   class Meta:
