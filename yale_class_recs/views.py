@@ -107,7 +107,7 @@ def edit_info(request):
       student.grad_year = form.cleaned_data['grad_year']
       student.major = form.cleaned_data['major']
       student.save()
-    return HttpResponseRedirect('/yale_class_recs/accounts/profile')
+    return HttpResponseRedirect('/yale_class_recs/accounts/profile/')
 
   form = StudentForm({'first_name': student.first_name, 'last_name': student.last_name,
     'grad_year': student.grad_year, 'major': student.major})

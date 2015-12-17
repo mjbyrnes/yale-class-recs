@@ -40,7 +40,7 @@
     <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
 
-    <form method="post" action="{% url 'yale_class_recs:django.contrib.auth.views.login' %}">
+    <form method="post" action="{% url 'yale_class_recs:login' %}">
     {% csrf_token %}
     <div style="padding-bottom: 20px">
     <table>
