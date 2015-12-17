@@ -24,7 +24,7 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/yale_class_recs/home">Home</a></li>
+            <li><a href="login">Login</a></li>
             <li><a href="#About">About</a></li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -32,32 +32,7 @@
     </nav>
 
     <div class="container">
-		<h1>Log In</h1>
-
-		<p>Please enter your username and password to log in. If you don't yet have an account, <a href="/yale_class_recs/new_user_info">click here</a> to set one up and get started with Eli</p>
-
-		{% if form.errors %}
-		<p>Your username and password didn't match. Please try again.</p>
-		{% endif %}
-
-		<form method="post" action="{% url 'yale_class_recs:django.contrib.auth.views.login' %}">
-		{% csrf_token %}
-		<div style="padding-bottom: 20px">
-		<table>
-    		<tr>
-        		<td>{{ form.username.label_tag }}</td>
-        		<td>{{ form.username }}</td>
-    		</tr>
-    		<tr>
-        		<td>{{ form.password.label_tag }}</td>
-        		<td>{{ form.password }}</td>
-    		</tr>
-		</table>
-		</div>
-
-		<input type="submit" value="submit" />
-		<input type="hidden" name="next" value="{{ next }}" />
-		</form>
-	</div>
+		  <h2>Logged Out</h2>
+    </div>
   </body>
 </html>

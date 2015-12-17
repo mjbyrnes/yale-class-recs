@@ -6,10 +6,8 @@
 
 <form action="/general-info/" method="post">
     {% csrf_token %}
-    <h2>General Information</h2>
-    {{ form.as_p }}
     <h2>Course Preferences</h2>
-    {{ form2.as_p }}
+    {{ form.as_p }}
     <input type="submit" value="Submit" class="btn btn-default"/>
 </form>
 
