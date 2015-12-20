@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'ADS_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'evaluations.sqlite'),
+        'NAME': os.path.join(BASE_DIR, 'course_data.sqlite'),
     }
 }
 

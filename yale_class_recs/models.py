@@ -77,8 +77,29 @@ class CourseProfile(models.Model):
     oci_id = models.IntegerField(blank=True, null=True)
     ybb_id = models.IntegerField(unique=True, blank=True, null=True)
 
+class CompleteData(models.Model):
+    subject = models.TextField(blank=True, null=True)
+    number = models.TextField(blank=True, null=True)
+    ybb_id = models.IntegerField(blank=True, null=True)
+    season = models.IntegerField(blank=True, null=True)
+    title = models.TextField(blank=True, null=True)
+    long_title = models.TextField(blank=True, null=True)
+    average_rating = models.FloatField(blank=True, null=True)
+    average_difficulty = models.FloatField(blank=True, null=True)
+    num_students = models.IntegerField(blank=True, null=True)
+    descrip = models.TextField(db_column='Descrip', blank=True, null=True)  # Field name made lowercase.
+    time = models.TextField(db_column='Time', blank=True, null=True)  # Field name made lowercase.
+    dist1 = models.TextField(db_column='Dist1', blank=True, null=True)  # Field name made lowercase.
+    dist2 = models.TextField(db_column='Dist2', blank=True, null=True)  # Field name made lowercase.
+    dist3 = models.TextField(db_column='Dist3', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'complete_data'
+
+
 class EvaluationComments(models.Model):
-    id = models.IntegerField(primary_key=True, blank=True, null=False)  # AutoField?
+    id = models.IntegerField(primary_key=True, blank=True)  # AutoField?
     course_id = models.IntegerField(blank=True, null=True)
     type = models.IntegerField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
@@ -91,7 +112,7 @@ class EvaluationComments(models.Model):
 
 
 class EvaluationCourseNames(models.Model):
-    id = models.IntegerField(primary_key=True, blank=True, null=False)  # AutoField?
+    id = models.IntegerField(primary_key=True, blank=True)  # AutoField?
     course_id = models.IntegerField(blank=True, null=True)
     subject = models.TextField(blank=True, null=True)
     number = models.TextField(blank=True, null=True)
@@ -121,7 +142,7 @@ class EvaluationCourseNames(models.Model):
 
 
 class EvaluationCourses(models.Model):
-    id = models.IntegerField(primary_key=True, blank=True, null=False)  # AutoField?
+    id = models.IntegerField(primary_key=True, blank=True)  # AutoField?
     season = models.IntegerField(blank=True, null=True)
     title = models.TextField(blank=True, null=True)
     long_title = models.TextField(blank=True, null=True)
@@ -149,7 +170,7 @@ class EvaluationCourses(models.Model):
 
 
 class EvaluationProfessors(models.Model):
-    id = models.IntegerField(primary_key=True, blank=True, null=False)  # AutoField?
+    id = models.IntegerField(primary_key=True, blank=True)  # AutoField?
     course_id = models.IntegerField(blank=True, null=True)
     professor = models.TextField(blank=True, null=True)
 
@@ -157,3 +178,20 @@ class EvaluationProfessors(models.Model):
         managed = False
         db_table = 'evaluation_professors'
         unique_together = (('professor', 'course_id'),)
+
+
+class YaleApiData(models.Model):
+    id = models.IntegerField(primary_key=True)
+    subject = models.TextField(db_column='Subject', blank=True, null=True)  # Field name made lowercase.
+    num = models.TextField(db_column='Num', blank=True, null=True)  # Field name made lowercase.
+    shorttitle = models.TextField(db_column='shortTitle', blank=True, null=True)  # Field name made lowercase.
+    longtitle = models.TextField(db_column='longTitle', blank=True, null=True)  # Field name made lowercase.
+    descrip = models.TextField(db_column='Descrip', blank=True, null=True)  # Field name made lowercase.
+    time = models.TextField(db_column='Time', blank=True, null=True)  # Field name made lowercase.
+    dist1 = models.TextField(db_column='Dist1', blank=True, null=True)  # Field name made lowercase.
+    dist2 = models.TextField(db_column='Dist2', blank=True, null=True)  # Field name made lowercase.
+    dist3 = models.TextField(db_column='Dist3', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'yale_API_data'

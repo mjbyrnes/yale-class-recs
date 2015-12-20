@@ -21,15 +21,16 @@ form p
 }
 </style>
 
-<h1>Let's begin</h1>
-<p>Fill out the form below with all of your preferences. Based on your responses, you'll be provided with some recommendations and an explanation of the suggestions. If you leave any fields blank, they simply won't factor into the calculations.</p>
+<h1>Let's begin.</h1>
+<p>Fill out the form below with all of your preferences. Based on your responses, you'll be provided with course recommendations and an explanation of why they were chosen for you. If you leave any of the optional fields blank, they simply won't factor into the calculations.</p>
 
 <form action="/yale_class_recs/search/" method="post">
     {% csrf_token %}
     <h2>Course Preferences</h2>
     {{ form.as_p }}
     <h2>Category Importance</h2>
-    <p>Please select how important each factor is to you on a scale from 0-10. A selection of 0 means a given factor will not be considered in picking a class, while a score of 10 means your selection for that category will absolutely be reflected in the class chosen</p>
+    <p>Please select how important each factor is to you on a scale from 0-10. A selection of 0 means a given factor will not be considered in picking a class, while a score of 10 means your selection for that category will absolutely be reflected in the class chosen.</p>
+    <p><b>This section doesn't do anything yet.</b></p>
     {{ form2.as_p }}
     <div style="padding-top: 50px">
     	<input type="submit" value="Submit" class="btn btn-default"/>

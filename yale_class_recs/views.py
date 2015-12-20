@@ -5,10 +5,9 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
 from .forms import UserForm, StudentForm, CourseForm, WeightForm
-
 from .models import Student
+from . import score_calc as sc
 
 class CoverView(generic.ListView):
   template_name = "yale_class_recs/cover.html"
@@ -43,19 +42,28 @@ def search_results(request):
     rating = form.cleaned_data['rating']
     size = form.cleaned_data['size']
     day = form.cleaned_data['day']
+
     start_time = form.cleaned_data['start_time']
     end_time = form.cleaned_data['end_time']
+    times = (start_time, end_time)
     area = form.cleaned_data['area']
     skills = form.cleaned_data['skills']
     keywords = form.cleaned_data['keywords']
     major = form.cleaned_data['major']
-
-    difficulty_weight = form2.cleaned_data['difficulty_weight']
-    rating_weight = form2.cleaned_data['rating_weight']
-    size_weight = form2.cleaned_data['size_weight']
-    time_weight = form2.cleaned_data['time_weight']
-
-    return render(request, 'yale_class_recs/search_results.html', {})
+    weights = [
+      form2.cleaned_data['difficulty_weight'],
+      form2.cleaned_data['rating_weight'],
+      form2.cleaned_data['size_weight'],
+      form2.cleaned_data['time_weight']
+    ]
+    print size
+    print major
+    print keywords
+    results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights)
+    disp = []
+    for course in results:
+      disp.append(course.title)
+    return render(request, 'yale_class_recs/search_results.html', {'total': str(len(results)), 'course_results': results})
 
   form = CourseForm()
   form2 = WeightForm()

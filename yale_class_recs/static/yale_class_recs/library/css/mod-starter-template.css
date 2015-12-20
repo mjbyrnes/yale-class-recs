@@ -51,3 +51,12 @@ label {
 td {
   padding: 10px;
 }
+
+.search_results {
+  max-width: 900px;
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}

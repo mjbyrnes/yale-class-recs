@@ -1,7 +1,57 @@
-{% extends "yale_class_recs/base.html" %}
+{% load staticfiles %}
 
-{% block content %}
+<html>
+  <head>
+    <link href="{% static 'yale_class_recs/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'yale_class_recs/library/css/mod-starter-template.css' %}" rel="stylesheet" media="screen">
+  </head>
 
-<h1>Search Results</h1>
+  <body id="top">
 
-{% endblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{% static 'yale_class_recs/bootstrap/js/bootstrap.min.js' %}"></script>
+    
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/yale_class_recs">Eli: The Smart Course Assistant</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="/yale_class_recs/accounts/profile/">Home</a></li>
+            <li><a href="/yale_class_recs/about/">About</a></li>
+            <li><a href="/yale_class_recs/logout/">Logout</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="search_results">
+      <h1>Search Results <small>{{ total }} courses matched your search.</small></h1>
+        <div class="row">
+          <div class="col-md-3">Title</div>
+          <div class="col-md-5">Description</div>
+          <div class="col-md-1">Rating</div>
+          <div class="col-md-1">Difficulty</div>
+          <div class="col-md-2">Time</div>
+        </div>
+      {% for course in course_results %}
+        <div class="row">
+          <div class="col-md-3">{{ course.long_title }}</div>
+          <div class="col-md-5">{{ course.descrip }}</div>
+          <div class="col-md-1">{{ course.average_rating|floatformat:-1 }}</div>
+          <div class="col-md-1">{{ course.average_difficulty|floatformat:-1 }}</div>
+          <div class="col-md-2">{{ course.time }}</div>
+        </div>
+        <br>
+      {% endfor %}
+    </div>
+
+  </body>
+</html>
