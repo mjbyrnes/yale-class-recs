@@ -78,6 +78,7 @@ class CourseProfile(models.Model):
     ybb_id = models.IntegerField(unique=True, blank=True, null=True)
 
 class CompleteData(models.Model):
+    id = models.IntegerField(primary_key=True)
     subject = models.TextField(blank=True, null=True)
     number = models.TextField(blank=True, null=True)
     ybb_id = models.IntegerField(blank=True, null=True)
