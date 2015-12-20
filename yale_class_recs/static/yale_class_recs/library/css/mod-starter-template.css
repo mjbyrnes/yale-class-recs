@@ -60,3 +60,16 @@ td {
   padding-right: 15px;
   padding-left: 15px;
 }
+
+.navbar {
+  background-color: #0e4c92;
+  border-color: #0e4c92;
+}
+
+.navbar-header .navbar-brand {
+  color: #fff;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  color: #fff;
+}
