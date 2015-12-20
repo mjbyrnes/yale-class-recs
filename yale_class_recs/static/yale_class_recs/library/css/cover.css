@@ -161,3 +161,20 @@ body {
     width: 700px;
   }
 }
+
+.btn {
+  color: #0e4c92;
+}
+
+form {
+  width: 260px;
+  margin: 0 auto;
+}
+
+td {
+  padding-right: 5px;
+}
+
+input {
+  color: #000;
+}
