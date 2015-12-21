@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .forms import UserForm, StudentForm, CourseForm, WeightForm
-from .models import Student
+from .models import Student, CompleteData
 from . import score_calc as sc
 
 class CoverView(generic.ListView):
@@ -56,10 +56,6 @@ def search_results(request):
       form2.cleaned_data['size_weight'],
       form2.cleaned_data['time_weight']
     ]
-    print difficulty
-    print size
-    print major
-    print keywords
     results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights)
     disp = []
     for course in results:
@@ -69,6 +65,13 @@ def search_results(request):
   form = CourseForm()
   form2 = WeightForm()
   return render(request, 'yale_class_recs/search.html', {'form': form, 'form2': form2,})
+
+def course_info(request, course_id):
+  if not request.user.is_authenticated():
+    return HttpResponseRedirect('/yale_class_recs/login')
+
+  course = CompleteData.objects.get(id=course_id)
+  return render(request, 'yale_class_recs/course_info.html', {'course': course,})
 
 def get_new_user_info(request):
   error = 0
