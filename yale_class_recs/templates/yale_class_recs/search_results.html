@@ -48,6 +48,7 @@
           <div class="col-md-1">{{ course.average_rating|floatformat:-1 }}</div>
           <div class="col-md-1">{{ course.average_difficulty|floatformat:-1 }}</div>
           <div class="col-md-2">{{ course.time }}</div>
+          <div><a href="/yale_class_recs/search/{{ course.id }}/" class="btn btn-md btn-default">More Info</a></div>
         </div>
         <br>
       {% endfor %}
