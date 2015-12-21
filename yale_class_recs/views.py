@@ -56,6 +56,7 @@ def search_results(request):
       form2.cleaned_data['size_weight'],
       form2.cleaned_data['time_weight']
     ]
+    print difficulty
     print size
     print major
     print keywords

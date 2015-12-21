@@ -5,24 +5,17 @@ import sqlite3 as lite
 from django.db import models
 from django.db.models import Q
 from .models import Student, CourseProfile, CompleteData, YaleApiData
+import operator
 
 #Calculate workload score
 def workload_score_calc(pref, actual): #int, int, boolean
-
-  w_diff = abs(actual - pref)
-
   if actual <= pref:
     workload_score = 1
   else:
-    workload_score = 1-log(w_diff+1, 3) #Same log base so that the rate of change is always the same. Chose 3 arbitrarily.
+    w_diff = abs(actual - pref)
+    workload_score = 1-math.log(w_diff+1, 3) #Same log base so that the rate of change is always the same. Chose 3 arbitrarily.
 
   return workload_score
-
-# print(workload_score_calc(3,3.1,True))
-# print(workload_score_calc(3,3.2,True))
-# print(workload_score_calc(3,3.3,True))
-
-#---------------------------------------------------------------------------------------------------------------
 
 #Calculate rating score
 def rating_score_calc(pref, actual): #int, int, boolean
@@ -31,16 +24,9 @@ def rating_score_calc(pref, actual): #int, int, boolean
   if actual >= pref:
     rating_score = 1
   else:
-    rating_score = 1-log(r_diff+1, 3) #Same log base so that the rate of change is always the same. Chose 3 arbitrarily.
+    rating_score = 1-math.log(r_diff+1, 3) #Same log base so that the rate of change is always the same. Chose 3 arbitrarily.
 
   return rating_score
-
-# print(rating_score_calc(3,3.1,False))
-# print(rating_score_calc(3,3.2,False))
-# print(rating_score_calc(3,3.3,False))
-
-
-#---------------------------------------------------------------------------------------------------------------
 
 #Calculate subject score
 def keyword_score_calc(terms, descrip): #array, string
@@ -56,58 +42,25 @@ def keyword_score_calc(terms, descrip): #array, string
 
   return count/total_terms
 
-#---------------------------------------------------------------------------------------------------------------
-
 #Calculate class size score
 def size_score_calc(seminar, size): #boolean, int
-  if seminar:
+  if seminar == "S":
     if size <= 25:
       size_score = 1
     else:
-      size_score = 1-log(size-24,15)
-  else:
+      size_score = 1-math.log(size-24,15)
+  elif seminar == "L":
     if size >= 40:
       size_score = 1
     else:
-      size_score = 1-log(41 - size,15)
+      size_score = 1-math.log(41 - size,15)
+  else:
+    size_score = 1
 
   if size_score < 0:
     size_score = 0
 
   return size_score
-
-# print(size_score_calc(True, 45))
-# print(size_score_calc(True, 15))
-# print(size_score_calc(True, 26))
-# print(size_score_calc(True, 27))
-
-#---------------------------------------------------------------------------------------------------------------
-
-#Calculate class time score
-# def time_score_calc(start, end, intervals): #time, time, array of (start, end) tuples
-#   time_score = 0
-
-#   for i in intervals:
-#     if (start >= i[0]) & (end <= i[1]):
-#       time_score = 1
-#     elif (start >= i[0] - datetime.timedelta(minutes=30)) & (end <= i[1] + datetime.timedelta(minutes=30)):
-#       time_score = max(0.75, time_score)
-#     elif (start >= i[0] - datetime.timedelta(minutes=60)) & (end <= i[1] + datetime.timedelta(minutes=60)):
-#       time_score = max(0.5, time_score)
-#     elif (start >= i[0] - datetime.timedelta(minutes=90)) & (end <= i[1] + datetime.timedelta(minutes=90)):
-#       time_score = max(0.25, time_score)
-#     else:
-#       time_score = max(0, time_score)
-
-#   return time_score
-
-# a = datetime.datetime(1,1,1,13,0,0)
-# b = datetime.datetime(1,1,1,14,15,0)
-# c = [(datetime.datetime(1,1,1,11,0,0),datetime.datetime(1,1,1,14,0,0)), (datetime.datetime(1,1,1,17,0,0),datetime.datetime(1,1,1,18,0,0))]
-
-# print(time_score_calc(a, b, c))
-
-#---------------------------------------------------------------------------------------------------------------
 
 #Calculate overall score:
 # Format of args:
@@ -153,15 +106,26 @@ def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, tim
 
   # keywords <-- currently creates a list of scores but does not do anything with it
   keywords = [search_terms]
-  scores = []
+  word_scores = []
   for course in courses:
     x = keyword_score_calc(keywords, course.descrip)
-    scores.append(x)
+    word_scores.append(x)
   #print scores
 
-  # rank courses by preference
-  pass # need to query old_courses for each class in the filtered set to get difficulty and rating info
+  scores = {}
+  for course in courses:
+    w_score = workload_score_calc(float(pref_work), course.average_difficulty)
+    r_score = rating_score_calc(float(pref_rat), course.average_rating)
+    s_score = size_score_calc(size, course.num_students)
+    weighted_score = int(weights[0])*w_score + int(weights[1])*r_score + int(weights[2])*s_score
+    scores[course.id] = weighted_score
 
+    print str(w_score) + "+" + str(r_score) + "+" + str(s_score) + " = " + str(weighted_score)
+  #print scores
+  top10 = dict(sorted(scores.iteritems(), key=operator.itemgetter(1), reverse=True)[:10])
+  for entry in top10:
+    print CompleteData.objects.get(pk=entry).long_title
+  print top10
   return courses
 
 #AFTER CLICKING SUBMIT:

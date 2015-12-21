@@ -53,7 +53,7 @@ td {
 }
 
 .search_results {
-  max-width: 900px;
+  max-width: 100%;
   position: relative;
   margin-right: auto;
   margin-left: auto;
@@ -73,3 +73,9 @@ td {
 .navbar-inverse .navbar-nav > li > a {
   color: #fff;
 }
+
+.btn-sq {
+  width: 35px;
+  height: 35px;
+}
+
