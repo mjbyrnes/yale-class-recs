@@ -35,24 +35,28 @@
     <div class="search_results">
       <h1>Search Results <small>{{ total }} courses matched your search.</small></h1>
         <div class="row">
-          <div class="col-md-3"><b>Title</b></div>
-          <div class="col-md-5"><b>Description</b></div>
-          <div class="col-md-1"><b>Rating</b></div>
-          <div class="col-md-1"><b>Difficulty</b></div>
-          <div class="col-md-2"><b>Time</b></div>
+          <div class="col-md-4 col-xs-6"><b>Title</b></div>
+          <div class="col-md-1 col-xs-6"><b>Course Number</b></div>
+          <div class="col-md-1 col-xs-2"><b>Skills/Area</b></div>
+          <div class="col-md-1 col-xs-1"><b>Rating</b></div>
+          <div class="col-md-1 col-xs-1"><b>Difficulty</b></div>
+          <div class="col-md-2 col-xs-1"><b>Time</b></div>
+          <div class="col-md-1 col-xs-1"><b>More Info</b></div>
+          <div class="col-md-1 col-xs-1"><b>Add To Worksheet</b></div>
         </div>
       {% for course in course_results %}
         <div class="row">
-          <div class="col-md-3">{{ course.long_title }}</div>
-          <div class="col-md-5">{{ course.descrip }}</div>
-          <div class="col-md-1">{{ course.average_rating|floatformat:-1 }}</div>
-          <div class="col-md-1">{{ course.average_difficulty|floatformat:-1 }}</div>
-          <div class="col-md-2">{{ course.time }}</div>
-          <div><a href="/yale_class_recs/search/{{ course.id }}/" class="btn btn-md btn-default">More Info</a></div>
+          <div class="col-md-4 col-xs-6">{{ course.long_title }}</div>
+          <div class="col-md-1 col-xs-6">{{ course.subject }} {{ course.number}}</div>
+          <div class="col-md-1 col-xs-12">{{ course.dist1|slice:"-2:" }} {{ course.dist2|slice:"-2:" }} {{ course.dist3|slice:"-2:" }}</div>
+          <div class="col-md-1 col-xs-12">{{ course.average_rating|floatformat:-2 }}</div>
+          <div class="col-md-1 col-xs-12">{{ course.average_difficulty|floatformat:-2 }}</div>
+          <div class="col-md-2 col-xs-12">{{ course.time }}</div>
+          <div class="col-md-1 col-xs-12"><a class="btn btn-md btn-default" href="/yale_class_recs/search/{{ course.id }}/">More Info</a></div>
+          <div class="col-md-1 col-xs-12"><a class="btn btn-md btn-default" href="/yale_class_recs/search">Add <span class="glyphicon glyphicon-plus"></span></a> </div>
         </div>
         <br>
       {% endfor %}
     </div>
-
   </body>
 </html>
