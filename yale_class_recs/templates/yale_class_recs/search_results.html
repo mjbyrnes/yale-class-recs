@@ -46,8 +46,8 @@
         </div>
       {% for course in course_results %}
         <div class="row">
-          <div class="col-md-4 col-xs-6">{{ course.long_title }}</div>
-          <div class="col-md-1 col-xs-6">{{ course.subject }} {{ course.number}}</div>
+          <div class="col-md-4 col-xs-6">{{ course.longTitle }}</div>
+          <div class="col-md-1 col-xs-6">{{ course.subject }} {{ course.num }}</div>
           <div class="col-md-1 col-xs-12">{{ course.dist1|slice:"-2:" }} {{ course.dist2|slice:"-2:" }} {{ course.dist3|slice:"-2:" }}</div>
           <div class="col-md-1 col-xs-12">{{ course.average_rating|floatformat:-2 }}</div>
           <div class="col-md-1 col-xs-12">{{ course.average_difficulty|floatformat:-2 }}</div>

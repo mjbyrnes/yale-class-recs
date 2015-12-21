@@ -57,9 +57,6 @@ def search_results(request):
       form2.cleaned_data['time_weight']
     ]
     results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights)
-    disp = []
-    for course in results:
-      disp.append(course.title)
     return render(request, 'yale_class_recs/search_results.html', {'total': str(len(results)), 'course_results': results})
 
   form = CourseForm()

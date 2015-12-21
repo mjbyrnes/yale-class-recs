@@ -124,9 +124,10 @@ def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, tim
   #print scores
   top10 = dict(sorted(scores.iteritems(), key=operator.itemgetter(1), reverse=True)[:10])
   for entry in top10:
-    print CompleteData.objects.get(pk=entry).long_title
+    print CompleteData.objects.get(pk=entry).longTitle
   print top10
   return courses
+
 
 #AFTER CLICKING SUBMIT:
 
