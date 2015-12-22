@@ -41,7 +41,7 @@ for i in subjects:
 
 		times = data[i][j]['meetingPattern']
 		try:
-			time.remove('1 HTBA ')
+			times.remove('1 HTBA ')
 		except ValueError:
 			pass
 		except AttributeError:
