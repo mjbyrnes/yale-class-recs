@@ -23,19 +23,19 @@ def about(request):
 def search(request):
   if not request.user.is_authenticated():
     return HttpResponseRedirect('/yale_class_recs/login')
-  
   # saves course to worksheet
-  save_course = request.POST.get("class", False)
-  if save_course:
-    x = Student.objects.get(user=request.user)
-    saves = x.get_courses()
-    temp = []
-    for num in saves:
-      temp.append(num)
-    temp.append(int(save_course))
-    x.saved_courses = temp
-    x.save()
-    return HttpResponseRedirect('/yale_class_recs/worksheet')
+  if request.method == "POST":
+    add_to_saved = request.POST.get("cid", False)
+    if add_to_saved:
+      x = Student.objects.get(user=request.user)
+      saves = x.get_courses()
+      temp = []
+      for num in saves:
+        temp.append(num)
+      temp.append(int(add_to_saved))
+      x.saved_courses = temp
+      x.save()
+      return render(request, 'yale_class_recs/search.html')
 
   if request.method == 'POST':
     form = CourseForm(request.POST)
@@ -50,7 +50,6 @@ def search(request):
 def search_results(request):
   if not request.user.is_authenticated():
     return HttpResponseRedirect('/yale_class_recs/login')
-
   form = CourseForm(request.POST)
   form2 = WeightForm(request.POST)
   if form.is_valid() and form2.is_valid():

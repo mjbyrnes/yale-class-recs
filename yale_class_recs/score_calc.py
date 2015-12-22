@@ -13,6 +13,7 @@ try:
 except:
   import pickle
 
+# dict containing major to subject code relationships
 major_dict = {'African American Studies (B.A.)': u'AFAM', 
 'African Studies (B.A.)': ['AFST'],
 'American Studies (B.A.)': ['AMST'],
@@ -234,7 +235,7 @@ def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, use
     courses = courses.exclude(subject__in=major_dict[user_major]) 
 
   ### Keywords Preprocessing for preference weighting
-  keywords = search_terms.strip().split(',')
+  keywords = search_terms.lower().strip().split(',')
   clean = []
   for word in keywords:
     clean.append(word.strip())
