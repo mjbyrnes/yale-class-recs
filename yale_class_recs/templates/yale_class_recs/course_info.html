@@ -1,11 +1,8 @@
 {% extends "yale_class_recs/base.html" %}
 
 {% block content %}
-
-  
   <div class="course_info">
       <h1>{{ course.longTitle }}</h1>
-<<<<<<< Updated upstream
       <div class="row">
         <div class="col-md-12">
           <h3>Course Description</h3>
@@ -32,9 +29,11 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-        <h3>Explanation</h3>
-        <p>This class is a great fit for you.</p></div>
-        <div class="col-md-6"><h3>Course Data</h3>
+          <h3>Explanation</h3>
+          <p>{{ explanation }}</p>
+        </div>
+        <div class="col-md-6">
+          <h3>Course Data</h3>
           <p><b>Rating:</b> {{ course.average_rating|floatformat:-2 }}</p>
           <p><b>Difficulty:</b> {{ course.average_difficulty|floatformat:-2 }}</p>
           <p><b>Size (Last time it was taught):</b> {{ course.num_students }}</p>
@@ -42,31 +41,6 @@
       </div>
       <br>
       <a class="btn btn-lg btn-default container btn-primary" href="/yale_class_recs/search/" onClick="history.go(-1);return true;">Back To Search</a>
-=======
-      <h3>Course Description</h3>
-      <p>{{ course.subject }} {{ course.num }}</p>
-      <p>{{ course.descrip }} </p>
-      <p><b>Time:</b> {{ course.time }}</p>
-      <p>
-      <b>Skills/Area:</b>
-      {% if course.dist1 %}
-       {{ course.dist1|slice:"-2:" }} {{ course.dist2|slice:"-2:" }} {{ course.dist3|slice:"-2:" }}
-      {% elif course.dist2 %}
-       {{ course.dist1|slice:"-2:" }} {{ course.dist2|slice:"-2:" }} {{ course.dist3|slice:"-2:" }}
-      {% elif course.dist3 %}
-        {{ course.dist1|slice:"-2:" }} {{ course.dist2|slice:"-2:" }} {{ course.dist3|slice:"-2:" }}
-      {% else %}
-        None
-      {% endif %}
-      </p>
-      <h3>Explanation</h3>
-      <p>{{ explanation }}</p>
-      <h3>Course Data</h3>
-      <p><b>Rating:</b> {{ course.average_rating|floatformat:-2 }}</p>
-      <p><b>Difficulty:</b> {{ course.average_difficulty|floatformat:-2 }}</p>
-      <p><b>Size (Last time it was taught):</b> {{ course.num_students }}</p>
->>>>>>> Stashed changes
   </div>
-
 {% endblock %}
 
