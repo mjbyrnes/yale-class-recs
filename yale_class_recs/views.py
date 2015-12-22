@@ -8,7 +8,11 @@ from django.contrib.auth.models import User
 from .forms import UserForm, StudentForm, CourseForm, WeightForm
 from .models import Student, CompleteData
 from . import score_calc as sc
+<<<<<<< Updated upstream
 import datetime as dt
+=======
+from . import explanation as explain
+>>>>>>> Stashed changes
 
 class CoverView(generic.ListView):
   template_name = "yale_class_recs/cover.html"
@@ -69,8 +73,27 @@ def search_results(request):
       form2.cleaned_data['rating_weight'],
       form2.cleaned_data['size_weight'],
     ]
+<<<<<<< Updated upstream
     results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights, request)
     return render(request, 'yale_class_recs/search_results.html', {'total': str(len(results)), 'course_results': results})
+=======
+
+    request.session['difficulty'] = difficulty
+    request.session['rating'] = rating
+    request.session['size'] = size
+    request.session['day'] = day
+    request.session['start_time'] = start_time
+    request.session['end_time'] = end_time
+    request.session['area'] = area
+    request.session['skills'] = skills
+    request.session['keywords'] = keywords
+    request.session['major'] = major
+    request.session['weights'] = weights
+
+    results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights)
+    return render(request, 'yale_class_recs/search_results.html', {'total': str(len(results)),
+      'course_results': results,})
+>>>>>>> Stashed changes
 
   form = CourseForm()
   form2 = WeightForm()
@@ -80,8 +103,37 @@ def course_info(request, course_id):
   if not request.user.is_authenticated():
     return HttpResponseRedirect('/yale_class_recs/login')
 
+  difficulty = request.session['difficulty']
+  rating = request.session['rating']
+  size = request.session['size']
+  day = request.session['day']
+  start_time = request.session['start_time']
+  end_time = request.session['end_time']
+  area = request.session['area']
+  skills = request.session['skills']
+  keywords = request.session['keywords']
+  major = request.session['major']
+  weights = request.session['weights']
+
+  '''
+  print request.session['difficulty']
+  print request.session['rating']
+  print request.session['size']
+  print request.session['day']
+  print request.session['start_time']
+  print request.session['end_time']
+  print request.session['area']
+  print request.session['skills']
+  print request.session['keywords']
+  print request.session['major']
+  print request.session['weights']
+  '''
+
   course = CompleteData.objects.get(id=course_id)
-  return render(request, 'yale_class_recs/course_info.html', {'course': course,})
+  explanation = explain.explain(course, difficulty, rating, size, day, start_time,
+    end_time, area, skills, keywords, major, weights)
+  return render(request, 'yale_class_recs/course_info.html', {'course': course,
+    'explanation': explanation,})
 
 def get_new_user_info(request):
   error = 0
