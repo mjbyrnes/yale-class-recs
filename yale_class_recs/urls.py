@@ -21,4 +21,5 @@ urlpatterns = [
 	url(r'^accounts/profile/$', views.user_home, name='user_home_page'),
 	url(r'^accounts/edit_info/$', views.edit_info, name="edit_info"),
 	url(r'^search/$', views.search, name='search'),
+	url(r'^search/(?P<course_id>[0-9]+)/$', views.course_info, name='course_info'),
 ]
