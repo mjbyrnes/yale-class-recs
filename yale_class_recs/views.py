@@ -20,12 +20,25 @@ def about(request):
 def search(request):
   if not request.user.is_authenticated():
     return HttpResponseRedirect('/yale_class_recs/login')
+  
+  # saves course to worksheet
+  save_course = request.POST.get("class", False)
+  if save_course:
+    x = Student.objects.get(user=request.user)
+    saves = x.get_courses()
+    temp = []
+    for num in saves:
+      temp.append(num)
+    temp.append(int(save_course))
+    x.saved_courses = temp
+    x.save()
+    return worksheet(request)
 
   if request.method == 'POST':
-      form = CourseForm(request.POST)
-      form2 = WeightForm(request.POST)
-      if form.is_valid() and form2.is_valid():
-        return search_results(request)
+    form = CourseForm(request.POST)
+    form2 = WeightForm(request.POST)
+    if form.is_valid() and form2.is_valid():
+      return search_results(request)
 
   form = CourseForm()
   form2 = WeightForm()
@@ -56,7 +69,7 @@ def search_results(request):
       form2.cleaned_data['size_weight'],
       form2.cleaned_data['time_weight']
     ]
-    results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights)
+    results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights, request)
     return render(request, 'yale_class_recs/search_results.html', {'total': str(len(results)), 'course_results': results})
 
   form = CourseForm()
@@ -158,3 +171,16 @@ def edit_info(request):
     'form': form,
   }
   return render(request, 'yale_class_recs/edit_info.html', context)
+
+def worksheet(request):
+  if not request.user.is_authenticated():
+    return HttpResponseRedirect('/yale_class_recs/login')
+
+  saved = Student.objects.get(user=request.user).get_courses()
+  cd = CompleteData.objects.filter(pk__in=saved)
+
+  context = {
+    'saved': saved,
+    'CD': cd,
+  }
+  return render(request, 'yale_class_recs/worksheet.html', context)

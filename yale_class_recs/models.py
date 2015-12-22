@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+import json
 
 majors = ['African American Studies (B.A.)','African Studies (B.A.)','American Studies (B.A.)','Anthropology (B.A.)',
 'Applied Mathematics (B.A. or B.S.)','Applied Physics (B.S.)','Archaeological Studies (B.A.)','Architecture (B.A.)',
@@ -44,6 +45,16 @@ class Student(models.Model):
     )
     grad_year = models.CharField(max_length=4, choices=grad_years)
     major = models.CharField(max_length=100, choices=[(x,x) for x in majors])
+    saved_courses = models.CharField(max_length=800,blank=True,null=True)
+    def set_courses(self, x):
+        self.saved_courses = json.dumps(x)
+        self.saved_courses = [[2,4]]
+        print 
+    def get_courses(self):
+        if self.saved_courses:
+            return json.loads(self.saved_courses)
+        else:
+            return []
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,

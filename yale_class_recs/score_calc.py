@@ -4,8 +4,10 @@ import time
 import sqlite3 as lite
 from django.db import models
 from django.db.models import Q
+from django.contrib.auth.models import User
 from .models import Student, CourseProfile, CompleteData, YaleApiData
 import operator
+import itertools
 
 #Calculate workload score
 def workload_score_calc(pref, actual): #int, int, boolean
@@ -72,7 +74,8 @@ def size_score_calc(seminar, size): #boolean, int
 # size = string which is either 'L' for lecture, 'S' for seminar, or 'E' for either
 # major = a list of 1 string which is either '1' for in major, '0' for out of major, or '2' for neither
 # weights = list of four preference weights: [difficulty, rating, size, time]
-def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, time, size, major, weights):
+# request = httprequest from the view to pass along user information
+def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, time, size, major, weights, request):
   # get all of the courses from the databases for current and historical courses
   courses = CompleteData.objects.all()
   old_courses = CompleteData.objects.all()
@@ -93,12 +96,13 @@ def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, tim
 
   # class size
   # should actually a function to provide score instead of a hard cutoff
-  if size == 'L':
+  '''if size == 'L':
     courses.filter(num_students__gte=20) # filter out less than a certain size
   elif size == 'S':
-    courses.filter(num_students__lte=30) # filter out greater than a certain size
+    courses.filter(num_students__lte=30)''' # filter out greater than a certain size
 
   # major <-- need to incorporate the major of the individual
+  user_major = Student.objects.get(user=request.user).major
   if major[0] == '1':
     courses = courses.filter(subject='CPSC')
   elif major[0] == '0':
@@ -110,32 +114,36 @@ def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, tim
   for course in courses:
     x = keyword_score_calc(keywords, course.descrip)
     word_scores.append(x)
-  #print scores
 
+  ### Preference Weighting using the four given parameters
   scores = {}
   for course in courses:
+    # workload
     w_score = workload_score_calc(float(pref_work), course.average_difficulty)
+    # rating
     r_score = rating_score_calc(float(pref_rat), course.average_rating)
+    # size
     s_score = size_score_calc(size, course.num_students)
+    # time
+    pass
+
+    # weight the scores according to user preference and store result in score dict
     weighted_score = int(weights[0])*w_score + int(weights[1])*r_score + int(weights[2])*s_score
     scores[course.id] = weighted_score
 
+    # debugging print statement
     print str(w_score) + "+" + str(r_score) + "+" + str(s_score) + " = " + str(weighted_score)
-  #print scores
+  
   top10 = dict(sorted(scores.iteritems(), key=operator.itemgetter(1), reverse=True)[:10])
+  
+  top10_courses = CompleteData.objects.none()
   for entry in top10:
+    #top10_courses = list(itertools.chain(list(top10_courses),list(CompleteData.objects.get(pk=entry))))
     print CompleteData.objects.get(pk=entry).longTitle
+  
+  # debug print
   print top10
+  print top10_courses
+
   return courses
-
-
-#AFTER CLICKING SUBMIT:
-
-def recommend_classes():
-  pass
-  #get data from form
-  #get data for all classes fitting the skills/areas/in major/time filters
-  #run match_score_calc for each course
-  #find 5 highest scores and present them with explanation
-
 

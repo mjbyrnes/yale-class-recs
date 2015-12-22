@@ -33,8 +33,8 @@
     </nav>
 
     <div class="search_results">
-      <h1>Search Results <small>{{ total }} courses matched your search.</small></h1>
-        <div class="row">
+      <h1>Search Results <small>{{ total }} courses matched your search.</small><a class="btn btn-md btn-info btn-default pull-right" href="/yale_class_recs/search/">New Search</a></h1>
+        <div class="row row-results">
           <div class="col-md-4 col-xs-6"><b>Title</b></div>
           <div class="col-md-1 col-xs-6"><b>Course Number</b></div>
           <div class="col-md-1 col-xs-2"><b>Skills/Area</b></div>
@@ -45,17 +45,21 @@
           <div class="col-md-1 col-xs-1"><b>Add To Worksheet</b></div>
         </div>
       {% for course in course_results %}
-        <div class="row">
-          <div class="col-md-4 col-xs-6">{{ course.longTitle }}</div>
+        <div class="row row-results">
+          <div class="col-md-4 col-xs-6 big">{{ course.longTitle }}</div>
           <div class="col-md-1 col-xs-6">{{ course.subject }} {{ course.num }}</div>
           <div class="col-md-1 col-xs-12">{{ course.dist1|slice:"-2:" }} {{ course.dist2|slice:"-2:" }} {{ course.dist3|slice:"-2:" }}</div>
           <div class="col-md-1 col-xs-12">{{ course.average_rating|floatformat:-2 }}</div>
           <div class="col-md-1 col-xs-12">{{ course.average_difficulty|floatformat:-2 }}</div>
           <div class="col-md-2 col-xs-12">{{ course.time }}</div>
-          <div class="col-md-1 col-xs-12"><a class="btn btn-md btn-default" href="/yale_class_recs/search/{{ course.id }}/">More Info</a></div>
-          <div class="col-md-1 col-xs-12"><a class="btn btn-md btn-default" href="/yale_class_recs/search">Add <span class="glyphicon glyphicon-plus"></span></a> </div>
+          <div class="col-md-1 col-xs-12"><a class="btn btn-md btn-info btn-default" href="/yale_class_recs/search/{{ course.id }}/">More Info</a></div>
+          <div class="col-md-1 col-xs-12">
+            <form action = "" method = "post">
+              {% csrf_token %}
+              <button class="btn btn-md btn-success btn-default" type="submit" name="class" value="{{ course.id }}">Save Class</button>
+            </form>
+          </div>
         </div>
-        <br>
       {% endfor %}
     </div>
   </body>
