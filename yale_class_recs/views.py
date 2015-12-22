@@ -32,7 +32,7 @@ def search(request):
     temp.append(int(save_course))
     x.saved_courses = temp
     x.save()
-    return worksheet(request)
+    return HttpResponseRedirect('/yale_class_recs/worksheet')
 
   if request.method == 'POST':
     form = CourseForm(request.POST)
@@ -176,6 +176,22 @@ def worksheet(request):
   if not request.user.is_authenticated():
     return HttpResponseRedirect('/yale_class_recs/login')
 
+  # remove classes from worksheet
+  delete_course = request.POST.get("class", False)
+  if delete_course:
+    x = Student.objects.get(user=request.user)
+    saves = x.get_courses()
+    temp = []
+    for num in saves:
+      if num == int(delete_course):
+        pass
+      else:
+        temp.append(num)
+    x.saved_courses = temp
+    x.save()
+    return HttpResponseRedirect('/yale_class_recs/worksheet')
+
+  # display classes to user  
   saved = Student.objects.get(user=request.user).get_courses()
   cd = CompleteData.objects.filter(pk__in=saved)
 
