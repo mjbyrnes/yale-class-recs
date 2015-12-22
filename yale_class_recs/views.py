@@ -72,9 +72,6 @@ def search_results(request):
       form2.cleaned_data['size_weight'],
     ]
 
-    results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights, request)
-    return render(request, 'yale_class_recs/search_results.html', {'total': str(len(results)), 'course_results': results})
-
     request.session['difficulty'] = difficulty
     request.session['rating'] = rating
     request.session['size'] = size
@@ -87,7 +84,7 @@ def search_results(request):
     request.session['major'] = major
     request.session['weights'] = weights
 
-    results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights)
+    results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights, request)
     return render(request, 'yale_class_recs/search_results.html', {'total': str(len(results)),
       'course_results': results,})
 
