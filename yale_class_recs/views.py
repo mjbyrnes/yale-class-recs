@@ -8,11 +8,9 @@ from django.contrib.auth.models import User
 from .forms import UserForm, StudentForm, CourseForm, WeightForm
 from .models import Student, CompleteData
 from . import score_calc as sc
-<<<<<<< Updated upstream
 import datetime as dt
-=======
 from . import explanation as explain
->>>>>>> Stashed changes
+
 
 class CoverView(generic.ListView):
   template_name = "yale_class_recs/cover.html"
@@ -73,10 +71,9 @@ def search_results(request):
       form2.cleaned_data['rating_weight'],
       form2.cleaned_data['size_weight'],
     ]
-<<<<<<< Updated upstream
+
     results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights, request)
     return render(request, 'yale_class_recs/search_results.html', {'total': str(len(results)), 'course_results': results})
-=======
 
     request.session['difficulty'] = difficulty
     request.session['rating'] = rating
@@ -93,7 +90,6 @@ def search_results(request):
     results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights)
     return render(request, 'yale_class_recs/search_results.html', {'total': str(len(results)),
       'course_results': results,})
->>>>>>> Stashed changes
 
   form = CourseForm()
   form2 = WeightForm()
