@@ -1,5 +1,5 @@
 import math
-import datetime
+import datetime as dt
 import time
 import sqlite3 as lite
 from django.db import models
@@ -10,17 +10,25 @@ import operator
 import itertools
 
 #Calculate workload score
-def workload_score_calc(pref, actual): #int, int, boolean
-  if actual <= pref:
-    workload_score = 1
+def workload_score_calc(pref, actual, weight): #int, int, boolean
+  if weight == 0:
+    return 0
+  if pref <= 2.5:
+    if actual <= pref:
+      workload_score = 1
+    else:
+      w_diff = abs(actual - pref)
+      workload_score = 1-math.log(w_diff+1, 3) #Same log base so that the rate of change is always the same. Chose 3 arbitrarily.
   else:
     w_diff = abs(actual - pref)
-    workload_score = 1-math.log(w_diff+1, 3) #Same log base so that the rate of change is always the same. Chose 3 arbitrarily.
+    workload_score = 1-math.log(w_diff+1, 3)
 
-  return workload_score
+  return workload_score*weight
 
 #Calculate rating score
-def rating_score_calc(pref, actual): #int, int, boolean
+def rating_score_calc(pref, actual, weight): #int, int, boolean
+  if weight == 0:
+    return 0
   r_diff = abs(actual - pref)
 
   if actual >= pref:
@@ -28,7 +36,7 @@ def rating_score_calc(pref, actual): #int, int, boolean
   else:
     rating_score = 1-math.log(r_diff+1, 3) #Same log base so that the rate of change is always the same. Chose 3 arbitrarily.
 
-  return rating_score
+  return rating_score*weight
 
 #Calculate subject score
 def keyword_score_calc(terms, descrip): #array, string
@@ -37,15 +45,17 @@ def keyword_score_calc(terms, descrip): #array, string
   count = 0
 
   for i in terms:
-    count = count + descrip.count(i)
+    count = count + descrip.lower().count(i)
 
   if count > total_terms:
     count = total_terms
 
-  return count/total_terms
+  return count*5
 
 #Calculate class size score
-def size_score_calc(seminar, size): #boolean, int
+def size_score_calc(seminar, size, weight): #boolean, int
+  if weight == 0:
+    return 0
   if seminar == "S":
     if size <= 25:
       size_score = 1
@@ -57,12 +67,41 @@ def size_score_calc(seminar, size): #boolean, int
     else:
       size_score = 1-math.log(41 - size,15)
   else:
-    size_score = 1
+    size_score = 0
 
   if size_score < 0:
     size_score = 0
 
-  return size_score
+  return size_score*weight
+
+# parse database time
+def time_parser(entry): #string
+  if entry == '':
+    return ''
+
+  if entry[0] not in ['M', 'T', 'W', 'F']:
+    return ''
+  else:
+    tm = entry.split(' ',1)[1]
+    tm = tm.strip(' ')
+    tm = tm.rstrip('p')
+
+    start = tm.split('-')[0]
+    end = tm.split('-')[1]
+    start = [int(start.split('.')[0]), int(start.split('.')[1])]
+    end = [int(end.split('.')[0]), int(end.split('.')[1])]
+
+    if start[0] < 8:
+      start[0] = start[0] + 12
+      end[0] = end[0] + 12
+    if end[0] < 9:
+      end[0] = end[0] + 12
+
+    start_time = dt.time(hour=start[0], minute=start[1])
+    end_time = dt.time(hour=end[0], minute=end[1])
+
+    cleaned_time = [start_time, end_time]
+  return cleaned_time
 
 #Calculate overall score:
 # Format of args:
@@ -73,12 +112,11 @@ def size_score_calc(seminar, size): #boolean, int
 # time = tuple of start and end time filters
 # size = string which is either 'L' for lecture, 'S' for seminar, or 'E' for either
 # major = a list of 1 string which is either '1' for in major, '0' for out of major, or '2' for neither
-# weights = list of four preference weights: [difficulty, rating, size, time]
+# weights = list of three preference weights: [difficulty, rating, size]
 # request = httprequest from the view to pass along user information
-def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, time, size, major, weights, request):
-  # get all of the courses from the databases for current and historical courses
+def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, usertime, size, major, weights, request):
+  # get all of the courses from the databases for current courses
   courses = CompleteData.objects.all()
-  old_courses = CompleteData.objects.all()
 
   ### Filter Database using the following parameters: areas, skills, days, time, size, major ###
   # area and skills requirements
@@ -92,58 +130,52 @@ def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, tim
     courses = courses.exclude(time__contains=weekday)
 
   # time of day
-  pass #courses = courses.filter(time__iregex=r'') <-- use regex like this probably?
-
-  # class size
-  # should actually a function to provide score instead of a hard cutoff
-  '''if size == 'L':
-    courses.filter(num_students__gte=20) # filter out less than a certain size
-  elif size == 'S':
-    courses.filter(num_students__lte=30)''' # filter out greater than a certain size
+  for course in courses:
+    times = time_parser(course.time)
+    # remove courses that start too early
+    if times != '':
+      if times[0] < usertime[0]:
+        courses = courses.exclude(pk=course.id)
+      # remove courses that start too late
+      elif times[1] > usertime[1]:
+        courses = courses.exclude(pk=course.id)
 
   # major <-- need to incorporate the major of the individual
   user_major = Student.objects.get(user=request.user).major
   if major[0] == '1':
-    courses = courses.filter(subject='CPSC')
+    courses = courses.filter(subject='CPSC') # replace subject='CPSC' with subject__in=major_dict[user_major] once Raymond builds it
   elif major[0] == '0':
-    courses = courses.exclude(subject='CPSC')
+    courses = courses.exclude(subject='CPSC') 
 
-  # keywords <-- currently creates a list of scores but does not do anything with it
-  keywords = [search_terms]
-  word_scores = []
-  for course in courses:
-    x = keyword_score_calc(keywords, course.descrip)
-    word_scores.append(x)
+  ### Keywords Preprocessing for preference weighting
+  keywords = search_terms.strip().split(',')
+  clean = []
+  for word in keywords:
+    clean.append(word.strip())
 
-  ### Preference Weighting using the four given parameters
+  ### Preference Weighting using the four required parameters
   scores = {}
   for course in courses:
     # workload
-    w_score = workload_score_calc(float(pref_work), course.average_difficulty)
+    w_score = workload_score_calc(float(pref_work), course.average_difficulty, int(weights[0]))
     # rating
-    r_score = rating_score_calc(float(pref_rat), course.average_rating)
+    r_score = rating_score_calc(float(pref_rat), course.average_rating, int(weights[1]))
     # size
-    s_score = size_score_calc(size, course.num_students)
+    s_score = size_score_calc(size, course.num_students, int(weights[2]))
     # time
     pass
+    # keywords
+    k_score = 2*keyword_score_calc(clean, course.longTitle)+keyword_score_calc(clean, course.descrip)
 
     # weight the scores according to user preference and store result in score dict
-    weighted_score = int(weights[0])*w_score + int(weights[1])*r_score + int(weights[2])*s_score
+    weighted_score = int(weights[0])*w_score + int(weights[1])*r_score + int(weights[2])*s_score + k_score
     scores[course.id] = weighted_score
 
-    # debugging print statement
-    print str(w_score) + "+" + str(r_score) + "+" + str(s_score) + " = " + str(weighted_score)
-  
-  top10 = dict(sorted(scores.iteritems(), key=operator.itemgetter(1), reverse=True)[:10])
-  
-  top10_courses = CompleteData.objects.none()
-  for entry in top10:
-    #top10_courses = list(itertools.chain(list(top10_courses),list(CompleteData.objects.get(pk=entry))))
-    print CompleteData.objects.get(pk=entry).longTitle
-  
-  # debug print
-  print top10
-  print top10_courses
-
-  return courses
-
+  ### Final Sorting Process to get top scores
+  top50 = dict(sorted(scores.iteritems(), key=operator.itemgetter(1), reverse=True)[:50])
+  # construct list to retrieve the top 50 or fewer courses
+  ids = []
+  for course_id in top50:
+    ids.append(course_id)
+  final = courses.filter(id__in=ids)
+  return final

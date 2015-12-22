@@ -26,25 +26,25 @@ class CourseForm(forms.Form):
     size = forms.ChoiceField(initial='E',choices=(('L', 'Lecture'), ('S', 'Seminar'), ('E','Either')), required=False)
     DAY_CHOICES = (('M', 'Monday'), ('T', 'Tuesday'), ('W', 'Wednesday'), ('Th', 'Thursday'),
         ('F', 'Friday'))
-    day = forms.MultipleChoiceField(label='Unwanted Days of the Week (will completely filter days selected)', choices=DAY_CHOICES, required=False,
+    day = forms.MultipleChoiceField(label='Unwanted Days of the Week (will completely remove days selected)', choices=DAY_CHOICES, required=False,
         widget=forms.CheckboxSelectMultiple)
-    TIME_CHOICES = ((1, '8 am'), (2, '9 am'), (3, '10 am'), (4, '11 am'), (5, '12 pm'),
-        (6, '1 pm'), (7, '2 pm'), (8, '3 pm'), (9, '4 pm'), (10, '5 pm'), (11, '6 pm'),
-        (12, '7 pm'), (13, '8 pm'), (14, '9 pm'))
-    start_time = forms.ChoiceField(initial=1, choices=TIME_CHOICES, required=False, label="Earliest Start Time")
-    end_time = forms.ChoiceField(initial=14,choices=TIME_CHOICES, required=False, label="Latest End Time")
+    TIME_CHOICES = ((8, '8 am'), (9, '9 am'), (10, '10 am'), (11, '11 am'), (12, '12 pm'),
+        (13, '1 pm'), (14, '2 pm'), (15, '3 pm'), (16, '4 pm'), (17, '5 pm'), (18, '6 pm'),
+        (19, '7 pm'), (20, '8 pm'), (21, '9 pm'))
+    start_time = forms.ChoiceField(initial=8, choices=TIME_CHOICES, required=False, label="Earliest Start Time")
+    end_time = forms.ChoiceField(initial=21,choices=TIME_CHOICES, required=False, label="Latest End Time")
     area = forms.MultipleChoiceField(label="Area Requirements", choices=(('YCHU', 'Humanities (Hu)'), ('YCSC', 'Sciences (Sc)'),
         ('YCSO', 'Social Sciences (So)')), required=False, widget=forms.CheckboxSelectMultiple)
     skills = forms.MultipleChoiceField(label="Skills Requirements", choices=(('YCQR', 'Quantitative Reasoning (QR)'), ('YCWR', 'Writing (WR)'), ("YCL", 'Foreign Language (L)')), required=False,
         widget=forms.CheckboxSelectMultiple)
-    keywords = forms.CharField(label="Keywords (separate with commas) (currently accepts a single word):", widget=forms.Textarea(),
+    keywords = forms.CharField(label="Keywords (separate with commas):", widget=forms.Textarea(),
         required=False)
     major = forms.ChoiceField(choices=((2, 'Doesn\'t Matter'), (1, 'Yes'), (0, 'No')), required=False,
-        label='Class in your major? (Currently, \'yes\' filters out everything that is not a CS course)', widget=forms.RadioSelect, initial=2)
+        label='Related to your major? (Currently, \'yes\' filters out everything that is not a CS course)', widget=forms.RadioSelect, initial=2)
 
 class WeightForm(forms.Form):
     INT_CHOICES = [(i, i) for i in range(11)]
     difficulty_weight = forms.ChoiceField(initial=5, choices=INT_CHOICES, required=False, label="Difficulty")
     rating_weight = forms.ChoiceField(initial=5, choices=INT_CHOICES, required=False, label="Rating")
     size_weight = forms.ChoiceField(initial=5, choices=INT_CHOICES, required=False, label="Size")
-    time_weight = forms.ChoiceField(initial=5, choices=INT_CHOICES, required=False, label="Time of Day")
+    #time_weight = forms.ChoiceField(initial=5, choices=INT_CHOICES, required=False, label="Time of Day")

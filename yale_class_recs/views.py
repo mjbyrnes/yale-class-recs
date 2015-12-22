@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from .forms import UserForm, StudentForm, CourseForm, WeightForm
 from .models import Student, CompleteData
 from . import score_calc as sc
+import datetime as dt
 
 class CoverView(generic.ListView):
   template_name = "yale_class_recs/cover.html"
@@ -58,7 +59,7 @@ def search_results(request):
 
     start_time = form.cleaned_data['start_time']
     end_time = form.cleaned_data['end_time']
-    times = (start_time, end_time)
+    times = (dt.time(hour=int(start_time), minute=0),dt.time(hour=int(end_time),minute=0))
     area = form.cleaned_data['area']
     skills = form.cleaned_data['skills']
     keywords = form.cleaned_data['keywords']
@@ -67,7 +68,6 @@ def search_results(request):
       form2.cleaned_data['difficulty_weight'],
       form2.cleaned_data['rating_weight'],
       form2.cleaned_data['size_weight'],
-      form2.cleaned_data['time_weight']
     ]
     results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights, request)
     return render(request, 'yale_class_recs/search_results.html', {'total': str(len(results)), 'course_results': results})

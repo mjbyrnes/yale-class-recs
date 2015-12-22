@@ -1,18 +1,21 @@
 {% extends "yale_class_recs/base.html" %}
 
 {% block content %}
-<h1>Update Information</h1>
-<p>Here is what you told us about yourself. Please update or correct anything you'd like.</p>
+<div class="edit-info">
+  <h1>Update Information</h1>
+  <p>Here is what you told us about yourself. Please update or correct anything you'd like.</p>
 
-<form action="/yale_class_recs/accounts/edit_info/" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" class="btn btn-default"/>
-</form>
+  <form action="/yale_class_recs/accounts/edit_info/" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Submit" class="btn btn-success btn-default"/>
+  </form>
 
-<div style="padding-top: 20px">
-	<h4>Change Password</h4>
-	<a href="/yale_class_recs/password_change" class="btn btn-md btn-default">Go</a>
+  <div style="padding-top: 20px">
+    <h4>Change Password</h4>
+    <a href="/yale_class_recs/password_change" class="btn btn-primary btn-md btn-default">Go</a>
+  </div>
 </div>
+
 
 {% endblock %}

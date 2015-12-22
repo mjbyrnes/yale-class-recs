@@ -49,7 +49,7 @@ def time_parser(entry): #string
 		end_time = datetime.time(hour=end[0], minute=end[1])
 
 		cleaned_time = [start_time, end_time]
-
+	print cleaned_time[0] < cleaned_time[1]
 	return cleaned_time
 
 #BELOW WAS JUST USED FOR TESTING
