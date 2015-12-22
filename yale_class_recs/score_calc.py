@@ -12,6 +12,7 @@ try:
   import cPickle as cPickle
 except:
   import pickle
+import pprint as pp
 
 # dict containing major to subject code relationships
 major_dict = {'African American Studies (B.A.)': u'AFAM', 
@@ -110,7 +111,7 @@ def workload_score_calc(pref, actual, weight): #int, int, boolean
     w_diff = abs(actual - pref)
     workload_score = 1-math.log(w_diff+1, 3)
 
-  return workload_score*weight
+  return workload_score
 
 #Calculate rating score
 def rating_score_calc(pref, actual, weight): #int, int, boolean
@@ -123,7 +124,7 @@ def rating_score_calc(pref, actual, weight): #int, int, boolean
   else:
     rating_score = 1-math.log(r_diff+1, 3) #Same log base so that the rate of change is always the same. Chose 3 arbitrarily.
 
-  return rating_score*weight
+  return rating_score
 
 #Calculate subject score
 def keyword_score_calc(terms, descrip): #array, string
@@ -137,7 +138,7 @@ def keyword_score_calc(terms, descrip): #array, string
   if count > total_terms:
     count = total_terms
 
-  return count*5
+  return count
 
 #Calculate class size score
 def size_score_calc(seminar, size, weight): #boolean, int
@@ -159,7 +160,7 @@ def size_score_calc(seminar, size, weight): #boolean, int
   if size_score < 0:
     size_score = 0
 
-  return size_score*weight
+  return size_score
 
 # parse database time
 def time_parser(entry): #string
@@ -267,6 +268,7 @@ def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, use
   final_courses = []
   for i_d in ids:
     final_courses.append(courses.filter(id=i_d)[0])
+  pp.pprint(top50)
 
   return final_courses
 
