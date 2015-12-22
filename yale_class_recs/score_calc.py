@@ -249,20 +249,26 @@ def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, use
     r_score = rating_score_calc(float(pref_rat), course.average_rating, int(weights[1]))
     # size
     s_score = size_score_calc(size, course.num_students, int(weights[2]))
-    # time
-    pass
     # keywords
     k_score = 2*keyword_score_calc(clean, course.longTitle)+keyword_score_calc(clean, course.descrip)
 
     # weight the scores according to user preference and store result in score dict
-    weighted_score = int(weights[0])*w_score + int(weights[1])*r_score + int(weights[2])*s_score + k_score
+    weighted_score = int(weights[0])*w_score + int(weights[1])*r_score + int(weights[2])*s_score + int(weights[3])*k_score
     scores[course.id] = weighted_score
 
   ### Final Sorting Process to get top scores
-  top50 = dict(sorted(scores.iteritems(), key=operator.itemgetter(1), reverse=True)[:50])
+  top50 = dict(sorted(scores.iteritems(), key=operator.itemgetter(1), reverse=True)[:100])
   # construct list to retrieve the top 50 or fewer courses
   ids = []
-  for course_id in top50:
-    ids.append(course_id)
-  final = courses.filter(id__in=ids)
-  return final
+  #print sorted(top50.iteritems(), key=operator.itemgetter(1), reverse=True)
+  for course_id in sorted(top50.iteritems(), key=operator.itemgetter(1), reverse=True):
+    ids.append(course_id[0])
+
+  final_courses = []
+  for i_d in ids:
+    final_courses.append(courses.filter(id=i_d)[0])
+
+  return final_courses
+
+
+

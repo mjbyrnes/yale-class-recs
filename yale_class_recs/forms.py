@@ -47,4 +47,4 @@ class WeightForm(forms.Form):
     difficulty_weight = forms.ChoiceField(initial=5, choices=INT_CHOICES, required=False, label="Difficulty")
     rating_weight = forms.ChoiceField(initial=5, choices=INT_CHOICES, required=False, label="Rating")
     size_weight = forms.ChoiceField(initial=5, choices=INT_CHOICES, required=False, label="Size")
-    #time_weight = forms.ChoiceField(initial=5, choices=INT_CHOICES, required=False, label="Time of Day")
+    keyword_weight = forms.ChoiceField(initial=5, choices=INT_CHOICES, required=False, label="Keyword Match")
