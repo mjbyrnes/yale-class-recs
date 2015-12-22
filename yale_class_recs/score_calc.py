@@ -8,6 +8,92 @@ from django.contrib.auth.models import User
 from .models import Student, CourseProfile, CompleteData, YaleApiData
 import operator
 import itertools
+try:
+  import cPickle as cPickle
+except:
+  import pickle
+
+major_dict = {'African American Studies (B.A.)': u'AFAM', 
+'African Studies (B.A.)': ['AFST'],
+'American Studies (B.A.)': ['AMST'],
+'Anthropology (B.A.)': ['ANTH'],
+'Applied Mathematics (B.A. or B.S.)': ['AMTH', 'MATH'],
+'Applied Physics (B.S.)': ['APHY'],
+'Archaeological Studies (B.A.)': ['ARCG'],
+'Architecture (B.A.)': ['ARCH'],
+'Art (B.A.)': ['ART'],
+'Astronomy (B.A.)': ['ASTR'],
+'Astronomy and Physics (B.S.)': ['ASTR', 'PHYS'],
+'Astrophysics (B.S.)': ['ASTR', 'PHYS'],
+'Biomedical Engineering (B.S.)': ['BENG'],
+'Chemical Engineering (B.S.)': ['CENG'],
+'Chemistry (B.A. or B.S.)': ['CHEM'],
+'Classical Civilization (B.A.)': ['CLCV'],
+'Classics (B.A.)': ['GREK', 'LATN', 'CLCV'],
+'Cognitive Science (B.A. or B.S.)': ['CGSC'],
+'Computer Science (B.A. or B.S.)': ['CPSC'],
+'Computer Science and Mathematics (B.A. or B.S.)': ['CPSC', 'MATH'],
+'Computer Science and Psychology (B.A.)': ['CPSC', 'PSYC'],
+'Computing and the Arts (B.A.)': ['CPSC', 'CPAR'],
+'East Asian Languages and Literatures (B.A.)': ['EALL', 'CHNS', 'JAPN', 'KREN'],
+'East Asian Studies (B.A.)': ['EAST'],
+'Ecology and Evolutionary Biology (B.A. or B.S.)': ['E&EB'],
+'Economics (B.A.)': ['ECON'],
+'Economics and Mathematics (B.A.)': ['ECON', 'MATH'],
+'Electrical Engineering (B.S.)': ['EENG'],
+'Electrical Engineering and Computer Science (B.S.)': ['EENG', 'CPSC'],
+'Engineering Sciences (Chemical) (B.S.)': ['CENG'],
+'Engineering Sciences (Electrical) (B.A. or B.S.)': ['EENG'],
+'Engineering Sciences (Environmental) (B.A.)': ['ENVE'],
+'Engineering Sciences (Mechanical) (B.A. or B.S.)': ['MENG'],
+'English (B.A.)': ['ENGL'],
+'Environmental Engineering (B.S.)': ['ENVE'],
+'Environmental Studies (B.A.)': ['EVST'],
+'Ethics, Politics, and Economics (B.A.)': ['EP&E'],
+'Ethnicity, Race, and Migration (B.A.)': ['ER&M'],
+'Film and Media Studies (B.A.)': ['FILM'],
+'French (B.A.)': ['FREN'],
+'Geology and Geophysics (B.S.)': ['G&G'],
+'Geology and Natural Resources (B.A.)': ['G&G'],
+'German (B.A.)': ['GMAN'],
+'German Studies (B.A.)': ['GMAN'],
+'Global Affairs (B.A.)': ['GLBL'],
+'Greek: Ancient and Modern (B.A.)': ['GREK'],
+'History (B.A.)': ['HIST'],
+'History of Art (B.A.)': ['HSAR'],
+'History of Science, Medicine, and Public Health (B.A.)': ['HSHM'],
+'Humanities (B.A.)': ['HUMS'],
+'Italian (B.A.)': ['ITAL'],
+'Judaic Studies (B.A.)': ['JDST'],
+'Latin American Studies (B.A.)': ['LATN'],
+'Linguistics (B.A.)': ['LING'],
+'Literature (B.A.)': ['LITR'],
+'Mathematics (B.A. or B.S.)': ['MATH'],
+'Mathematics and Philosophy (B.A.)': ['MATH', 'PHIL'],
+'Mathematics and Physics (B.S.)': ['MATH', 'PHYS'],
+'Mechanical Engineering (B.S.)': ['MENG'],
+'Modern Middle East Studies (B.A.)': ['MMES', 'ARBC'],
+'Molecular Biophysics and Biochemistry (B.A. or B.S.)': ['MB&B'],
+'Molecular, Cellular, and Developmental Biology (B.A. or B.S.)': ['MCDB'],
+'Music (B.A.)': ['MUSI'],
+'Near Eastern Languages and Civilizations (B.A.)': ['NELC'],
+'Philosophy (B.A.)': ['PHIL'],
+'Physics (B.S.)': ['PHYS'],
+'Physics and Geosciences (B.S.)': ['PHYS', 'G&G'],
+'Physics and Philosophy (B.A.)': ['PHYS', 'PHIL'],
+'Political Science (B.A.)': ['PLSC'],
+'Portuguese (B.A.)': ['PORT'],
+'Psychology (B.A. or B.S.)': ['PSYC'],
+'Religious Studies (B.A.)': ['RLST'],
+'Russian (B.A.)': ['RUSS'],
+'Russian and East European Studies (B.A.)': ['RUSS', 'RSEE'],
+'Sociology (B.A.)': ['SOCY'],
+'South Asian Studies (second major only)': ['SAST'],
+'Spanish (B.A.)': ['SPAN'],
+'Special Divisional Major (B.A. or B.S.)': [],
+'Statistics (B.A. or B.S.)': ['STAT'],
+'Theater Studies (B.A.)': ['THST'],
+'Women\'s, Gender, and Sexuality Studies (B.A.)': ['WGSS']}
 
 #Calculate workload score
 def workload_score_calc(pref, actual, weight): #int, int, boolean
@@ -143,9 +229,9 @@ def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, use
   # major <-- need to incorporate the major of the individual
   user_major = Student.objects.get(user=request.user).major
   if major[0] == '1':
-    courses = courses.filter(subject='CPSC') # replace subject='CPSC' with subject__in=major_dict[user_major] once Raymond builds it
+    courses = courses.filter(subject__in=major_dict[user_major]) # replace subject='CPSC' with subject__in=major_dict[user_major] once Raymond builds it
   elif major[0] == '0':
-    courses = courses.exclude(subject='CPSC') 
+    courses = courses.exclude(subject__in=major_dict[user_major]) 
 
   ### Keywords Preprocessing for preference weighting
   keywords = search_terms.strip().split(',')
