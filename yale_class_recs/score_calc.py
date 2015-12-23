@@ -228,10 +228,10 @@ def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, use
       elif times[1] > usertime[1]:
         courses = courses.exclude(pk=course.id)
 
-  # major <-- need to incorporate the major of the individual
+  # major 
   user_major = Student.objects.get(user=request.user).major
   if major[0] == '1':
-    courses = courses.filter(subject__in=major_dict[user_major]) # replace subject='CPSC' with subject__in=major_dict[user_major] once Raymond builds it
+    courses = courses.filter(subject__in=major_dict[user_major])
   elif major[0] == '0':
     courses = courses.exclude(subject__in=major_dict[user_major]) 
 
