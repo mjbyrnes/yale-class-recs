@@ -48,11 +48,11 @@ def time(start, end, day, weights):
 		if start != 8:
 			e += "after the start time"
 			if end != 21:
-				e += " and before the end time you selected."
+				e += " and before the end time you selected. "
 			else:
 				e += " you selected."
 		elif end != 21:
-			e += "before the end time you selected."
+			e += "before the end time you selected. "
 	return e
 
 def in_major(major, title):
