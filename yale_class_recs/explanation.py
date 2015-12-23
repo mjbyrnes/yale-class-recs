@@ -2,6 +2,7 @@ from .models import CompleteData
 import random as r
 import datetime as dt
 
+#Generate a random intro to the explanation
 def intro(title):
 	intros = [
 		"%s is a good fit for you. " % title,
@@ -12,6 +13,7 @@ def intro(title):
 	i = r.randrange(0,len(intros))
 	return intros[i]
 
+#Explain the evaluation of their factor weighting
 def weighting(course, difficulty, rating, weights):
 	e = ""
 	if weights[0] > weights[1]:
@@ -30,6 +32,7 @@ def weighting(course, difficulty, rating, weights):
 
 	return e
 
+#Explain the size of the class filter
 def size_type(size):
 	e = ""
 	if size == 'E':
@@ -41,6 +44,7 @@ def size_type(size):
 		e += "It's also a lecture course, like you requested. "
 	return e
 
+#Explain the time filter
 def time(start, end, day, weights):
 	e = ""
 	if start != 8 or end != 21:
@@ -55,6 +59,7 @@ def time(start, end, day, weights):
 			e += "before the end time you selected."
 	return e
 
+#Sentence about the class in or out of major filter
 def in_major(major, title):
 	e = ""
 	if int(major) == 0:
@@ -70,6 +75,8 @@ def in_major(major, title):
 
 	return e
 
+#Explain the algorithm used in computing scores for the classes to the user in
+#order to justify the choices
 def explain(course, difficulty, rating, size, day, start_time,
     end_time, area, skills, keywords, major, weights):
 

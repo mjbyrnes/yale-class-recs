@@ -3,11 +3,13 @@ from django.forms import ModelForm
 from django import forms
 from .models import Student, CourseProfile
 
+#Form to get user login data
 class UserForm(forms.Form):
     username = forms.CharField(label="Username", help_text="30 characters or fewer. Letters, digits and @/./+/-/_  only.")
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
     confirm_password = forms.CharField(label="Confirm Password", widget=forms.PasswordInput, help_text="Enter the same password as before, for verification.")
 
+#Form to get basic information about a student when they create an account
 class StudentForm(ModelForm):
     class Meta:
         model = Student
@@ -19,6 +21,8 @@ class StudentForm(ModelForm):
         'major': 'Major',
         }
 
+#Form to set up the search page and get data about a user's preferences to use in the algorithm
+#to select courses
 class CourseForm(forms.Form):
     INT_CHOICES = [(i*0.1, i*0.1) for i in range(1,51)]
     difficulty = forms.ChoiceField(initial=3.0, choices=INT_CHOICES, required=False)
@@ -42,6 +46,8 @@ class CourseForm(forms.Form):
     major = forms.ChoiceField(choices=((2, 'Doesn\'t Matter'), (1, 'Yes'), (0, 'No')), required=False,
         label='Related to your major? (Currently, \'yes\' filters out everything that is not a CS course)', widget=forms.RadioSelect, initial=2)
 
+#Form used on the search page to get data on how important a user considers each factor they were
+#asked about on the CourseForm
 class WeightForm(forms.Form):
     INT_CHOICES = [(i, i) for i in range(11)]
     difficulty_weight = forms.ChoiceField(initial=5, choices=INT_CHOICES, required=False, label="Difficulty")

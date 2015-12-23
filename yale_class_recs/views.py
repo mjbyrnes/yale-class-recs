@@ -108,20 +108,6 @@ def course_info(request, course_id):
   major = request.session['major']
   weights = request.session['weights']
 
-  '''
-  print request.session['difficulty']
-  print request.session['rating']
-  print request.session['size']
-  print request.session['day']
-  print request.session['start_time']
-  print request.session['end_time']
-  print request.session['area']
-  print request.session['skills']
-  print request.session['keywords']
-  print request.session['major']
-  print request.session['weights']
-  '''
-
   course = CompleteData.objects.get(id=course_id)
   explanation = explain.explain(course, difficulty, rating, size, day, start_time,
     end_time, area, skills, keywords, major, weights)
