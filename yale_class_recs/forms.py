@@ -44,7 +44,7 @@ class CourseForm(forms.Form):
     keywords = forms.CharField(label="Keywords (separate with commas):", widget=forms.Textarea(),
         required=False)
     major = forms.ChoiceField(choices=((2, 'Doesn\'t Matter'), (1, 'Yes'), (0, 'No')), required=False,
-        label='Related to your major? (Currently, \'yes\' filters out everything that is not a CS course)', widget=forms.RadioSelect, initial=2)
+        label='Related to your major?', widget=forms.RadioSelect, initial=2)
 
 #Form used on the search page to get data on how important a user considers each factor they were
 #asked about on the CourseForm

@@ -19,11 +19,11 @@ def weighting(course, difficulty, rating, weights):
 	if weights[0] > weights[1]:
 		e += "You said that the difficulty of the course was important to you, "
 		e += "and this course's difficulty rating of %s " % "{0:.2f}".format(course.average_difficulty)
-		e += "is close to your requested difficulty rating of %s. " % "{0:.1f}".format(difficulty)
+		e += "is close to your requested difficulty rating of %s. " % str(difficulty)
 	elif weights[1] > weights[0]:
 		e += "You said that the rating of the course was important to you, "
 		e += "and this course's average rating of %s " % "{0:.2f}".format(course.average_rating)
-		e += "is close to your requested rating of %s. " % "{0:.1f}".format(rating)
+		e += "is close to your requested rating of %s. " % str(rating)
 	else:
 		e += "It looks like difficulty and rating are both equally important to you. "
 		e += "This class has a good balance between these two factors, with "
@@ -52,11 +52,11 @@ def time(start, end, day, weights):
 		if start != 8:
 			e += "after the start time"
 			if end != 21:
-				e += " and before the end time you selected."
+				e += " and before the end time you selected. "
 			else:
 				e += " you selected."
 		elif end != 21:
-			e += "before the end time you selected."
+			e += "before the end time you selected. "
 	return e
 
 #Sentence about the class in or out of major filter
