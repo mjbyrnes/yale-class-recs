@@ -11,15 +11,15 @@ from . import score_calc as sc
 import datetime as dt
 from . import explanation as explain
 
+# cover page for site
+def cover(request):
+  return render(request, 'yale_class_recs/cover.html', {})
 
-class CoverView(generic.ListView):
-  template_name = "yale_class_recs/cover.html"
-  def get_queryset(self):
-    return None
-
+# about page
 def about(request):
   return render(request, 'yale_class_recs/about.html', {})
 
+# handles all search-related queries, including form, results, and adding to the worksheet
 def search(request):
   if not request.user.is_authenticated():
     return HttpResponseRedirect('/yale_class_recs/login')
@@ -36,22 +36,25 @@ def search(request):
       x.saved_courses = temp
       x.save()
       return render(request, 'yale_class_recs/search.html')
-
+  # search for courses if user submits form
   if request.method == 'POST':
     form = CourseForm(request.POST)
     form2 = WeightForm(request.POST)
     if form.is_valid() and form2.is_valid():
       return search_results(request)
-
+  # otherwise, just give the user an empty form
   form = CourseForm()
   form2 = WeightForm()
   return render(request, 'yale_class_recs/search.html', {'form': form, 'form2': form2,})
 
+# calculates search results based on all of the parameters selected in the form
 def search_results(request):
   if not request.user.is_authenticated():
     return HttpResponseRedirect('/yale_class_recs/login')
+  # get form data from POST request
   form = CourseForm(request.POST)
   form2 = WeightForm(request.POST)
+  # get all of the cleaned data for later use
   if form.is_valid() and form2.is_valid():
     difficulty = form.cleaned_data['difficulty']
     rating = form.cleaned_data['rating']
@@ -84,14 +87,17 @@ def search_results(request):
     request.session['major'] = major
     request.session['weights'] = weights
 
+    ### calculate scores for all Yale courses based on user's preferences
     results = sc.match_score_calc(difficulty, rating, area, skills, keywords, day, times, size, major, weights, request)
     return render(request, 'yale_class_recs/search_results.html', {'total': str(len(results)),
       'course_results': results,})
 
+  # if not a POST, just provide blank form
   form = CourseForm()
   form2 = WeightForm()
   return render(request, 'yale_class_recs/search.html', {'form': form, 'form2': form2,})
 
+# course information page
 def course_info(request, course_id):
   if not request.user.is_authenticated():
     return HttpResponseRedirect('/yale_class_recs/login')
@@ -114,6 +120,7 @@ def course_info(request, course_id):
   return render(request, 'yale_class_recs/course_info.html', {'course': course,
     'explanation': explanation,})
 
+# New User Information page
 def get_new_user_info(request):
   error = 0
 
@@ -166,6 +173,7 @@ def get_new_user_info(request):
   }
   return render(request, 'yale_class_recs/user_info.html', context)
 
+# User Home Page
 def user_home(request):
   if not request.user.is_authenticated():
     return HttpResponseRedirect('/yale_class_recs/login')
@@ -180,6 +188,7 @@ def user_home(request):
   }
   return render(request, 'yale_class_recs/user_home_page.html', context)
 
+# Edit Personal Info page
 def edit_info(request):
   if not request.user.is_authenticated():
     return HttpResponseRedirect('/yale_class_recs/login')
@@ -203,6 +212,7 @@ def edit_info(request):
   }
   return render(request, 'yale_class_recs/edit_info.html', context)
 
+# classes worksheet page
 def worksheet(request):
   if not request.user.is_authenticated():
     return HttpResponseRedirect('/yale_class_recs/login')

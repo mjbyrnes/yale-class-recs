@@ -5,14 +5,13 @@ import sqlite3 as lite
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
-from .models import Student, CourseProfile, CompleteData, YaleApiData
+from .models import Student, CompleteData
 import operator
 import itertools
 try:
   import cPickle as cPickle
 except:
   import pickle
-import pprint as pp
 
 # dict containing major to subject code relationships
 major_dict = {'African American Studies (B.A.)': u'AFAM', 
@@ -101,12 +100,16 @@ major_dict = {'African American Studies (B.A.)': u'AFAM',
 def workload_score_calc(pref, actual, weight): #int, int, boolean
   if weight == 0:
     return 0
+  # consider student who don't care about heavy workload specifically
   if pref <= 2.5:
     if actual <= pref:
       workload_score = 1
     else:
       w_diff = abs(actual - pref)
-      workload_score = 1-math.log(w_diff+1, 3) #Same log base so that the rate of change is always the same. Chose 3 arbitrarily.
+      # use a logarithmic distribution to capture user's utility preferences
+      workload_score = 1-math.log(w_diff+1, 3)
+  # for students who care more about workload, 
+  # score based on distance from target as opposed to whether it's below or not
   else:
     w_diff = abs(actual - pref)
     workload_score = 1-math.log(w_diff+1, 3)
@@ -118,11 +121,11 @@ def rating_score_calc(pref, actual, weight): #int, int, boolean
   if weight == 0:
     return 0
   r_diff = abs(actual - pref)
-
+  # use a logarithmic distribution to capture user's utility preferences
   if actual >= pref:
     rating_score = 1
   else:
-    rating_score = 1-math.log(r_diff+1, 3) #Same log base so that the rate of change is always the same. Chose 3 arbitrarily.
+    rating_score = 1-math.log(r_diff+1, 3) 
 
   return rating_score
 
@@ -131,29 +134,33 @@ def keyword_score_calc(terms, descrip): #array, string
   total_terms = len(terms)
 
   count = 0
-
+  # count terms in description or title based on input
   for i in terms:
     count = count + descrip.lower().count(i)
 
   if count > total_terms:
     count = total_terms
-
+  # return number of terms for scoring
   return count
 
 #Calculate class size score
 def size_score_calc(seminar, size, weight): #boolean, int
+  # filter out completely if user does not care
   if weight == 0:
     return 0
+  # score for seminar
   if seminar == "S":
     if size <= 25:
       size_score = 1
     else:
       size_score = 1-math.log(size-24,15)
+  # score for lecture
   elif seminar == "L":
     if size >= 40:
       size_score = 1
     else:
       size_score = 1-math.log(41 - size,15)
+  # score for either
   else:
     size_score = 0
 
@@ -173,18 +180,18 @@ def time_parser(entry): #string
     tm = entry.split(' ',1)[1]
     tm = tm.strip(' ')
     tm = tm.rstrip('p')
-
+    # split the expression into its parts
     start = tm.split('-')[0]
     end = tm.split('-')[1]
     start = [int(start.split('.')[0]), int(start.split('.')[1])]
     end = [int(end.split('.')[0]), int(end.split('.')[1])]
-
+    # compare to make sure the times are all valid
     if start[0] < 8:
       start[0] = start[0] + 12
       end[0] = end[0] + 12
     if end[0] < 9:
       end[0] = end[0] + 12
-
+    # create datetime objects
     start_time = dt.time(hour=start[0], minute=start[1])
     end_time = dt.time(hour=end[0], minute=end[1])
 
@@ -265,10 +272,10 @@ def match_score_calc(pref_work, pref_rat, areas, skills, search_terms, days, use
   for course_id in sorted(top50.iteritems(), key=operator.itemgetter(1), reverse=True):
     ids.append(course_id[0])
 
+  # order the results properly to display them for the user
   final_courses = []
   for i_d in ids:
     final_courses.append(courses.filter(id=i_d)[0])
-  pp.pprint(top50)
 
   return final_courses
 
