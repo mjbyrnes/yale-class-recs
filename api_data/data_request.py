@@ -19,14 +19,11 @@ for i in range(len(data)):
 with open("course_dict") as f:
   data = pickle.load(f)
 
+#Connect to the SQLite database which has historical data
 conn = sqlite3.connect('evaluations.sqlite', timeout=10)
 c = conn.cursor()
-# c.execute('SELECT * FROM {tn}'.\
-# 	format(tn='yale_API_data'))
-# test = c.fetchone()
-# print test
-max_len = []
 
+#Iterate through each course for following information: subject, number, short title, long title, description, time, distributions, 
 for i in subjects:
 	for j in xrange(len(data[i])):
 		subj = i
@@ -34,11 +31,13 @@ for i in subjects:
 		shortTitle = data[i][j]['shortTitle']
 		longTitle = data[i][j]['courseTitle']
 
+		#delete tags on description
 		try:
 			descrip = data[i][j]['description'].replace('<p>','').replace('</p>','')
 		except AttributeError:
 			descrip = ''
 
+		#time is stored in a list - only get the first time (the second is just section, which is 1 HTBA)
 		times = data[i][j]['meetingPattern']
 		try:
 			times.remove('1 HTBA ')
@@ -54,10 +53,11 @@ for i in subjects:
 		dist_orig = data[i][j]['distDesg']
 		dist = []
 		for k in dist_orig:
+			#only store relevant undergrad distributional skills/areas
 			if k in ['YCWR', 'YCHU', 'YCQR', 'YCSO', 'YCSC', 'YCL1', 'YCL2', 'YCL3', 'YCL4', 'YCL5']:
 				dist.append(k)
 
-		max_len.append(len(dist))
+		#store multiple skills/areas
 		try:
 			dist1 = dist[0]
 		except IndexError:
@@ -76,8 +76,3 @@ for i in subjects:
 conn.commit()
 c.close()
 conn.close()
-
-
-# print data["MATH"][0]["description"]
-# print data["MATH"][0]["distDesg"]
-# print data['MATH']

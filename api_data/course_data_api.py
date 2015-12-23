@@ -22,6 +22,7 @@ print subjects
 ### retrieve data from the Yale Course API and put it into a dictionary of JSON objects
 term_code = '201601' # term code for Spring 2016 semester
 course_dict = {}
+#iterate through each subject, as each subject is stored on a different URL
 for subject_code in subjects:
   url = 'https://gw.its.yale.edu/soa-gateway/course/webservice/index?apikey=l7xx250d4cb95d6641baa00ba20265423ed1'+'&termCode='+term_code+'&subjectCode='+subject_code+'&mode=json'
   response = u2.urlopen(url)
