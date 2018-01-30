@@ -30,16 +30,15 @@ Primarily, this project will be written in Python. Ideally, we will implement a 
 
 **Group Members:**
 Michael Byrnes
-Raymond Zhu
 Howard Clark
 
 **Division of Labor:**
 Database - Howard
 
-Yale API - Howard/Raymond
+Yale API - Howard
 
 Backend - Michael
 
-Frontend - Raymond/Michael
+Frontend - Michael
 
 Recommendation Model - all
